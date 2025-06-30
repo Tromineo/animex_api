@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Anime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -9,29 +10,30 @@ use PHPMD\Renderer\JSONRenderer;
 
 class AnimeController extends Controller
 {
-    public function __construct(Anime $anime){
+    public function __construct(Anime $anime)
+    {
         $this->model = $anime;
-        $this->middleware('auth:api', ['except' => ['index', 'show']]);
     }
     /**
      * Retorna todos os animes presentes na base de dados.
-     * 
+     *
      * A resposta pode ser paginada. Se a query string "por_pagina" for passada, a resposta
      * retorna os animes paginados com o valor especificado. Caso n o seja passado, a resposta
      * retorna todos os animes.
-     * 
+     *
      * @param Request $request A requisi o HTTP.
-     * 
+     *
      * @return JsonResponse A resposta JSON com os animes.
      */
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $paginacao = $request->query('por_pagina');
         if ($paginacao) {
             $animes = $this->model->paginate($paginacao);
         } else {
             $animes = $this->model->all();
         }
-        
+
         return response()->json($animes, Response::HTTP_OK);
     }
     /**
@@ -43,7 +45,9 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a id fornecida não for encontrado.
     */
-    public function show(int $id): JsonResponse{}
+    public function show(int $id): JsonResponse
+    {
+    }
     /**
     * Cria um novo animê com os dados recebidos.
     *
@@ -58,7 +62,9 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
     */
-    public function create(Request $request): JsonResponse{}
+    public function create(Request $request): JsonResponse
+    {
+    }
     /**
     * Exclui um animê específico a partir de uma Id fornecida na requisição. É softdelet.
     *
@@ -69,9 +75,11 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a Id fornecido não for encontrado.
     */
-    public function delete(Request $request): JsonResponse{}
+    public function delete(Request $request): JsonResponse
+    {
+    }
 
-        /**
+    /**
     * Atualiza um anime existente.
     *
     * @param \Illuminate\Http\Request $request A requisição contendo os dados para atualização. Deve incluir os seguintes campos:
@@ -85,7 +93,9 @@ class AnimeController extends Controller
     *
     * @throws ValidationException Se os dados de entrada não forem válidos.
     * @throws ModelNotFoundException Se o recurso com o ID fornecido não for encontrado.
-    */  
-    public function update(Request $request): JsonResponse{}
+    */
+    public function update(Request $request): JsonResponse
+    {
+    }
 
 }

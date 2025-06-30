@@ -67,6 +67,15 @@ return [
 
     'timezone' => 'UTC',
 
+
+
+//$app->middleware([
+//    App\Http\Middleware\ExampleMiddleware::class
+//]);
+
+//$app->routeMiddleware([
+//    'auth' => App\Http\Middleware\Authenticate::class,
+//]);
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

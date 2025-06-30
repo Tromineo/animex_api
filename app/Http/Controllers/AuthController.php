@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)    
+    public function register(Request $request)
     {
-        
+
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -35,7 +35,7 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
         $user = User::where('email', $request->email)->first();
-        
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'Dados inválidos'

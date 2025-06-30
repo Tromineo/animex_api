@@ -12,12 +12,12 @@ class CategoriaController extends Controller
     }
     /**
      * Retorna todas as categorias presentes na base de dados.
-     * 
+     *
      * @return JsonResponse A resposta JSON com as categorias.
      */
     public function index()
     {
-        
+
     }
     /**
      * Exibe os detalhes de uma categoria específica a partir da id fornecida na requisição.
@@ -30,7 +30,7 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        
+
     }
     /**
      * Cria uma nova categoria.
@@ -41,18 +41,22 @@ class CategoriaController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException Se os dados de entrada n o forem v lidos.
      */
-    public function create(Request $request){}
+    public function create(Request $request)
+    {
+    }
     /**
-     * Exclui uma categoria específica a partir de uma Id fornecida na requisição. 
-     * 
+     * Exclui uma categoria específica a partir de uma Id fornecida na requisição.
+     *
      * @param \Illuminate\Http\Request $request A requisição contendo a Id da categoria a ser excluído.
      *      - 'id': integer, obrigatório. A id da categoria que será excluído.
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a Id da categoria excluído e status 200 em caso de sucesso, ou false e status 204 se o ID não for válido.
-     * 
+     *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com a Id fornecido não for encontrado.
      */
-    public function delete(Request $request){}
+    public function delete(Request $request)
+    {
+    }
     /**
      * Atualiza uma categoria existente.
      *
@@ -64,5 +68,7 @@ class CategoriaController extends Controller
      * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com o ID fornecido não for encontrada.
      */
-    public function update(Request $request){}
+    public function update(Request $request)
+    {
+    }
 }
