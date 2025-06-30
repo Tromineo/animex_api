@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # necessário para push funcionar corretamente
 
       - name: Instalar PHP e dependências
         uses: shivammathur/setup-php@v2
@@ -21,5 +23,13 @@ jobs:
           tools: php-cs-fixer
           coverage: none
 
-      - name: Rodar PHP-CS-Fixer (modo verificação)
-        run: php-cs-fixer fix --dry-run --diff
+      - name: Rodar PHP-CS-Fixer (corrigir arquivos)
+        run: php-cs-fixer fix
+
+      - name: Commit e push das correções (se houver)
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          # Se houver mudanças, commit e push
+          git diff --cached --quiet || (git commit -m "Corrige formatação automática pelo PHP CS Fixer" && git push)
