@@ -1,0 +1,25 @@
+name: PHP CS Fixer
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar PHP e dependências
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: php-cs-fixer
+          coverage: none
+
+      - name: Rodar PHP-CS-Fixer (modo verificação)
+        run: php-cs-fixer fix --dry-run --diff
