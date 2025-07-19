@@ -43,3 +43,32 @@ O sistema permite cadastro de animes, criação de listas de favoritos, comentá
 
 ---
 
+### Instalação do projeto
+
+1. Clone o repositório
+```
+git clone https://github.com/seu-usuario/animex-api.git
+cd animex-api
+```
+2. Instale as dependências
+```
+composer install
+```
+3. Copie o arquivo de ambiente e configure as variáveis:
+```
+cp .env.example .env
+```
+4. Gere a chave da aplicação
+```
+php artisan key:generate
+```
+5. Gere o segredo JWT
+```
+php artisan jwt:secret
+```
+6. Inicie o servidor local com o artisan
+```
+php artisan serve
+```
+
+Assim, o projeto estará disponível no endereço http://localhost:8000/api
