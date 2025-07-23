@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
+        try{
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -26,6 +27,10 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $user->createToken('auth_token')->plainTextToken
         ]);
+        }catch(Exception $e){
+            
+        }
+
     }
 
     public function login(Request $request)
