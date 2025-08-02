@@ -110,7 +110,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Dados inválidos'
+                'message' => 'Dados invalidos'
             ], 401);
         }
 
