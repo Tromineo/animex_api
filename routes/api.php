@@ -14,3 +14,5 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/animes', [AnimeController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/animes', [AnimeController::class, 'create'])->middleware('auth:sanctum');
+
