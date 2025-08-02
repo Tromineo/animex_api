@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAnimeRequest;
 use App\Models\Anime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use app\Http\Requests\AnimeRequest;
 use Illuminate\Http\Response;
 use PHPMD\Renderer\JSONRenderer;
 
@@ -62,8 +64,10 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
     */
-    public function create(Request $request): JsonResponse
+    public function create(StoreAnimeRequest $request): JsonResponse
     {
+        $anime = Anime::create($request->validated());
+        return response()->json($anime, 201);
     }
     /**
     * Exclui um animê específico a partir de uma Id fornecida na requisição. É softdelet.
