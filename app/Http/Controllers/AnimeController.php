@@ -51,19 +51,40 @@ class AnimeController extends Controller
     {
     }
     /**
-    * Cria um novo animê com os dados recebidos.
-    *
-    * @param \Illuminate\Http\Request $request A requisição contendo os dados para criar um novo animê. Deve incluir os seguintes campos:
-    *      - 'titulo': string, obrigatório, máximo de 255 caracteres.
-    *      - 'genero': string, obrigatório, máximo de 255 caracteres.
-    *      - 'resumo': string, opcional, máximo de 255 caracteres.
-    *      - 'episodios': integer, obrigatório.
-    *      - 'lancamento': date, opcional.
-    *
-    * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com o animê criado e status 201 em caso de sucesso.
-    *
-    * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
-    */
+     * Cria um novo animê com os dados recebidos.
+     *
+     * @param \Illuminate\Http\Request $request A requisição contendo os dados para criar um novo animê.
+     * - 'titulo': string, obrigatório, máximo de 255 caracteres.
+     * - 'genero': string, obrigatório, máximo de 255 caracteres.
+     * - 'resumo': string, opcional, máximo de 255 caracteres.
+     * - 'episodios': integer, obrigatório.
+     * - 'lancamento': date, opcional.
+     *
+     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com o animê criado e status 201 em caso de sucesso.
+     *
+     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
+     *
+     * @OA\Post(
+     * path="/animes",
+     * tags={"Animes"},
+     * summary="Cria um novo animê",
+     * description="Cria um novo recurso de animê no banco de dados.",
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(ref="#/components/schemas/AnimeInput")
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="O animê foi criado com sucesso.",
+     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Dados de entrada inválidos.",
+     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * )
+     * )
+     */
     public function create(StoreAnimeRequest $request): JsonResponse
     {
         $anime = Anime::create($request->validated());
