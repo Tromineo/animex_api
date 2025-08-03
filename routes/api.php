@@ -15,4 +15,5 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/animes', [AnimeController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/animes', [AnimeController::class, 'create'])->middleware('auth:sanctum');
-
+Route::delete('/animes/{anime}', [AnimeController::class, 'delete'])->middleware('auth:sanctum');
+Route::patch('/animes/{anime}', [AnimeController::class, 'update'])->middleware('auth:sanctum');

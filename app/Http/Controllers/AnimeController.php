@@ -7,11 +7,17 @@ use App\Models\Anime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use app\Http\Requests\AnimeRequest;
+use App\Http\Requests\DestroyAnimeRequest;
+use App\Http\Requests\UpdateAnimeRequest;
 use Illuminate\Http\Response;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 use PHPMD\Renderer\JSONRenderer;
 
 class AnimeController extends Controller
 {
+    use AuthorizesRequests;
+
     public function __construct(Anime $anime)
     {
         $this->model = $anime;
@@ -100,8 +106,10 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a Id fornecido não for encontrado.
     */
-    public function delete(Request $request): JsonResponse
+    public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
     {
+        $anime->delete();
+        return response()->json(['message'=> 'Anime excluido com sucesso'], 200);
     }
 
     /**
@@ -119,8 +127,18 @@ class AnimeController extends Controller
     * @throws ValidationException Se os dados de entrada não forem válidos.
     * @throws ModelNotFoundException Se o recurso com o ID fornecido não for encontrado.
     */
-    public function update(Request $request): JsonResponse
+    public function update(UpdateAnimeRequest $request, Anime $anime): JsonResponse
     {
+        // 1. Autorização (usando Policy)
+        // Isso verifica se o usuário autenticado tem permissão para atualizar este anime.
+        $this->authorize('update', $anime);
+
+        // 2. Atualização dos dados
+        // O método 'validated()' retorna um array com os dados já validados.
+        $anime->update($request->validated());
+
+        // 3. Retorno da resposta
+        return response()->json($anime);
     }
 
 }

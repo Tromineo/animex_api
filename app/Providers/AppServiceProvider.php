@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Anime;
+use App\Policies\AnimePolicy;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        Anime::class => AnimePolicy::class
+    ];
     /**
      * Register any application services.
      */
