@@ -171,6 +171,28 @@ class AnimeController extends Controller
     *
     * @throws ValidationException Se os dados de entrada não forem válidos.
     * @throws ModelNotFoundException Se o recurso com o ID fornecido não for encontrado.
+    *
+    *
+    * @OA\Patch(
+     * path="/animes",
+     * tags={"Animes"},
+     * summary="Atualiza um animê",
+     * description="Atualiza um recurso de animê no banco de dados.",
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(ref="#/components/schemas/AnimeUpdate")
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="O animê foi criado com sucesso.",
+     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Dados de entrada inválidos.",
+     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * )
+     * )
     */
     public function update(UpdateAnimeRequest $request, Anime $anime): JsonResponse
     {
