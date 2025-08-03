@@ -6,6 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @OA\Schema(
+ * schema="Anime",
+ * title="Anime",
+ * description="Um modelo de anime",
+ * @OA\Property(
+ * property="id",
+ * type="integer",
+ * example=1
+ * ),
+ * @OA\Property(
+ * property="titulo",
+ * type="string",
+ * example="Naruto"
+ * ),
+ * @OA\Property(
+ * property="ano",
+ * type="integer",
+ * example=2002
+ * )
+ * )
+ */
 class Anime extends Model
 {
     use HasFactory;

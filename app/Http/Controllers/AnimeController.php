@@ -32,7 +32,31 @@ class AnimeController extends Controller
      * @param Request $request A requisi o HTTP.
      *
      * @return JsonResponse A resposta JSON com os animes.
-     */
+     *
+     * @OA\Get(
+     * path="/animes",
+     * summary="Retorna uma lista de animes",
+     * description="Retorna uma lista de animes. É possível paginar a lista passando o parâmetro 'por_pagina' na query.",
+     * tags={"Animes"},
+     * @OA\Parameter(
+     * name="por_pagina",
+     * in="query",
+     * description="Número de itens por página",
+     * required=false,
+     * @OA\Schema(
+     * type="integer"
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Lista de animes retornada com sucesso.",
+     * @OA\JsonContent(
+     * type="array",
+     * @OA\Items(ref="#/components/schemas/Anime")
+     * )
+     * )
+     * )
+    */
     public function index(Request $request)
     {
         $paginacao = $request->query('por_pagina');
@@ -105,6 +129,27 @@ class AnimeController extends Controller
     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a Id do animê excluído e status 200 em caso de sucesso, ou false e status 204 se o ID não for válido.
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a Id fornecido não for encontrado.
+    *
+    * @OA\Delete(
+     * path="/animes",
+     * tags={"Animes"},
+     * summary="Delete um animê específico",
+     * description="Deleta um recurso de animê no banco de dados.",
+     * @OA\RequestBody(
+     * required=true,
+     * @OA\JsonContent(ref="#/components/schemas/AnimeInput")
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="O animê foi criado com sucesso.",
+     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Dados de entrada inválidos.",
+     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * )
+     * )
     */
     public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
     {
