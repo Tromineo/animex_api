@@ -52,7 +52,7 @@ class AnimeController extends Controller
      * description="Lista de animes retornada com sucesso.",
      * @OA\JsonContent(
      * type="array",
-     * @OA\Items(ref="#/components/schemas/Anime")
+     * @OA\Items(ref="#/components/schemas/Animes")
      * )
      * )
      * )
@@ -76,9 +76,37 @@ class AnimeController extends Controller
     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com os detalhes do animê e status 200 em caso de sucesso.
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a id fornecida não for encontrado.
-    */
+    *
+    *  
+     * @OA\Get(
+     * path="/animes/{id}",
+     * summary="Retorna um anime específico",
+     * description="Retorna os dados de um anime buscando pelo seu ID.",
+     * tags={"Anime"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * required=true,
+     * description="ID do anime a ser retornado",
+     * @OA\Schema(
+     * type="integer"
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Dados do anime retornado com sucesso.",
+     * @OA\JsonContent(ref="#/components/schemas/Anime")
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Anime não encontrado."
+     * )
+     * )
+     */
     public function show(int $id): JsonResponse
     {
+        $anime = $this->model->findOrFail($id);
+        return response()->json($anime, Response::HTTP_OK);
     }
     /**
      * Cria um novo animê com os dados recebidos.

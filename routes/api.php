@@ -10,10 +10,13 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/animes', [AnimeController::class, 'index'])->middleware('auth:sanctum');
-Route::post('/animes', [AnimeController::class, 'create'])->middleware('auth:sanctum');
-Route::delete('/animes/{anime}', [AnimeController::class, 'delete'])->middleware('auth:sanctum');
-Route::patch('/animes/{anime}', [AnimeController::class, 'update'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/animes', [AnimeController::class, 'index']);
+    Route::get('/animes/{anime}', [AnimeController::class, 'show']);
+    Route::post('/animes', [AnimeController::class, 'create']);
+    Route::delete('/animes/{anime}', [AnimeController::class, 'delete']);
+    Route::patch('/animes/{anime}', [AnimeController::class, 'update']);
+});
