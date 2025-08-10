@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use app\Http\Requests\AnimeRequest;
 use App\Http\Requests\DestroyAnimeRequest;
 use App\Http\Requests\UpdateAnimeRequest;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use ModelNotFoundException;
 
 use PHPMD\Renderer\JSONRenderer;
 
@@ -105,8 +107,12 @@ class AnimeController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $anime = $this->model->findOrFail($id);
-        return response()->json($anime, Response::HTTP_OK);
+        try{
+            $anime = $this->model->findOrFail($id);
+            return response()->json($anime, Response::HTTP_OK);
+        }catch(ModelNotFoundException $e){
+            return response()->json(['message' => 'Anime não encontrado'], Response::HTTP_NOT_FOUND);
+        }
     }
     /**
      * Cria um novo animê com os dados recebidos.
