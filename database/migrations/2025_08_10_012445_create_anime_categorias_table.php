@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anime_categorias', function (Blueprint $table) {
+        Schema::create('anime_categoria', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('anime_id');
+            $table->unsignedBigInteger('categoria_id');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anime_categorias');
+        Schema::dropIfExists('anime_categoria');
     }
 };

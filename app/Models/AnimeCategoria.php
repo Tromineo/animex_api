@@ -33,7 +33,7 @@ class AnimeCategoria extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'anime_categorias';
+    protected $table = 'anime_categoria';
     protected $fillable = [
         'anime_id',
         'categoria_id',

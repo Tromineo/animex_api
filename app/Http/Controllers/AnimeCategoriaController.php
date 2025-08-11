@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AnimeCategoria;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
 
 class AnimeCategoriaController extends Controller
 {
