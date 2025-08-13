@@ -242,4 +242,10 @@ class AnimeController extends Controller
         return response()->json($anime);
     }
 
+    public function addCategoria(AddCategoriaRequest $request, Anime $anime): JsonResponse
+    {
+        $anime->categorias()->attach($request->categoria_id);
+        return response()->json($anime);
+    }
+
 }
