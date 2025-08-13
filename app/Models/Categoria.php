@@ -11,5 +11,5 @@ class Categoria extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = "";
+    protected $table = "categorias";
 }
