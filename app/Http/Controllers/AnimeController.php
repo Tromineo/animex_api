@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use ModelNotFoundException;
+use App\Http\Requests\AddCategoriaRequest;
+use App\Models\AnimeCategoria;
 
 use PHPMD\Renderer\JSONRenderer;
 
@@ -242,10 +244,17 @@ class AnimeController extends Controller
         return response()->json($anime);
     }
 
-    public function addCategoria(AddCategoriaRequest $request, Anime $anime): JsonResponse
+    public function vincularCategoria(Request $request, $animeId)
     {
-        $anime->categorias()->attach($request->categoria_id);
-        return response()->json($anime);
+        $animeCategoria = new AnimeCategoria();
+        $animeCategoria->anime_id = $animeId;
+        $animeCategoria->categoria_id = $request->categoria_id;
+        $animeCategoria->save();
+
+        return response()->json([
+            'message' => 'Categoria vinculada com sucesso.',
+            'anime' => $animeCategoria->load('categoria')
+        ], 200);
     }
 
 }
