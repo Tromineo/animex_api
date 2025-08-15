@@ -42,4 +42,8 @@ class Anime extends Model
         'lancamento',
         'episodios'
     ];
+
+    public function categoria(){
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
 }

@@ -21,7 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{anime}', [AnimeController::class, 'show']);
         Route::post('/', [AnimeController::class, 'create']);
         Route::delete('/{anime}', [AnimeController::class, 'delete']);
-        Route::patch('/{anime}', [AnimeController::class, 'update']);        
+        Route::patch('/{anime}', [AnimeController::class, 'update']);
+        Route::post('/{anime}/categorias', [AnimeController::class, 'vincularCategoria']);    
     });
 
     Route::group(['prefix' => 'categorias'], function () {

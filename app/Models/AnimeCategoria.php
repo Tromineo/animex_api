@@ -38,4 +38,8 @@ class AnimeCategoria extends Model
         'anime_id',
         'categoria_id',
     ];
+
+    public function animes(){
+        return $this->hasMany(Anime::class,'categoria_id');
+    }
 }
