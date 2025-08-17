@@ -1,14 +1,15 @@
 <?php
 
 namespace Tests\Unit\Http\Requests;
+
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-
 //use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
+
 class LoginRequestTest extends TestCase
 {
     use RefreshDatabase;
@@ -64,13 +65,13 @@ class LoginRequestTest extends TestCase
             'email' => $user->email,
             'password' => 'senha_errada',
         ]);
-        
+
         $response->assertStatus(401)
          ->assertJsonFragment([
              'message' => 'Dados invalidos' // Apenas o objeto
          ]);
     }
-    
+
     /**
      * @test
      *
@@ -93,4 +94,3 @@ class LoginRequestTest extends TestCase
                  ->assertJsonValidationErrors(['email', 'password']);
     }
 }
-
