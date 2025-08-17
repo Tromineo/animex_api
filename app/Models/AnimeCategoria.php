@@ -39,11 +39,13 @@ class AnimeCategoria extends Model
         'categoria_id',
     ];
 
-    public function animes(){
+    public function animes()
+    {
         return $this->belongsTo(Animes::class);
     }
 
-    public function categoria(){
+    public function categoria()
+    {
         return $this->belongsTo(Categoria::class);
     }
 }

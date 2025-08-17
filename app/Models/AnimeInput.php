@@ -1,4 +1,5 @@
 <?php
+
 // Exemplo: src/Models/AnimeInput.php
 // Ajuste o namespace para o seu projeto
 

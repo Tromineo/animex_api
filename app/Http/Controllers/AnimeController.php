@@ -15,7 +15,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use ModelNotFoundException;
 use App\Http\Requests\AddCategoriaRequest;
 use App\Models\AnimeCategoria;
-
 use PHPMD\Renderer\JSONRenderer;
 
 class AnimeController extends Controller
@@ -81,7 +80,7 @@ class AnimeController extends Controller
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a id fornecida não for encontrado.
     *
-    *  
+    *
      * @OA\Get(
      * path="/animes/{id}",
      * summary="Retorna um anime específico",
@@ -109,10 +108,10 @@ class AnimeController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        try{
+        try {
             $anime = $this->model->findOrFail($id);
             return response()->json($anime, Response::HTTP_OK);
-        }catch(ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Anime não encontrado'], Response::HTTP_NOT_FOUND);
         }
     }
@@ -190,7 +189,7 @@ class AnimeController extends Controller
     public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
     {
         $anime->delete();
-        return response()->json(['message'=> 'Anime excluido com sucesso'], 200);
+        return response()->json(['message' => 'Anime excluido com sucesso'], 200);
     }
 
     /**

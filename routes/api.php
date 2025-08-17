@@ -15,14 +15,14 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    
+
     Route::group(['prefix' => 'animes'], function () {
         Route::get('/', [AnimeController::class, 'index']);
         Route::get('/{anime}', [AnimeController::class, 'show']);
         Route::post('/', [AnimeController::class, 'create']);
         Route::delete('/{anime}', [AnimeController::class, 'delete']);
         Route::patch('/{anime}', [AnimeController::class, 'update']);
-        Route::post('/{anime}/categorias', [AnimeController::class, 'vincularCategoria']);    
+        Route::post('/{anime}/categorias', [AnimeController::class, 'vincularCategoria']);
     });
 
     Route::group(['prefix' => 'categorias'], function () {
@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{categoria}', [CategoriaController::class, 'show']);
         Route::post('/', [CategoriaController::class, 'create']);
         Route::delete('/{categoria}', [CategoriaController::class, 'delete']);
-        Route::patch('/{categoria}', [CategoriaController::class, 'update']);        
+        Route::patch('/{categoria}', [CategoriaController::class, 'update']);
     });
 
     Route::group(['prefix' => 'animeCategorias'], function () {

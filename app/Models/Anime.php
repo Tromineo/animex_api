@@ -43,7 +43,8 @@ class Anime extends Model
         'episodios'
     ];
 
-    public function categoria(){
+    public function categoria()
+    {
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 }

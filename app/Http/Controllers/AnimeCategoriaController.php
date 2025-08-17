@@ -13,11 +13,11 @@ class AnimeCategoriaController extends Controller
     use AuthorizesRequests;
 
     public function __construct(AnimeCategoria $model)
-    {   
-        $this->model = $model;  
+    {
+        $this->model = $model;
     }
 
-        /**
+    /**
      * Retorna todos os animes_categorias presentes na base de dados.
      *
      * A resposta pode ser paginada. Se a query string "por_pagina" for passada, a resposta
@@ -63,7 +63,7 @@ class AnimeCategoriaController extends Controller
 
         return response()->json($categorias, Response::HTTP_OK);
     }
-        /**
+    /**
     * Exibe os detalhes de um objeto animê-categoria específico a partir da id fornecida na requisição.
     *
     * @param int $id A id do animê-caregoria que será exibido.
@@ -72,7 +72,7 @@ class AnimeCategoriaController extends Controller
     *
     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê-categoria com a id fornecida não for encontrado.
     *
-    *  
+    *
      * @OA\Get(
      * path="/animes/{id}",
      * summary="Retorna um anime-caregoria específico",
@@ -100,9 +100,9 @@ class AnimeCategoriaController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        try{
+        try {
             return response()->json($this->model->findOrFail($id), Response::HTTP_OK);
-        }catch(ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Anime-categoria nao encontrado'], Response::HTTP_NOT_FOUND);
         }
     }

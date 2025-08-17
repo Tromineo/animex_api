@@ -1,4 +1,5 @@
 <?php
+
 // src/Models/AnimeOutput.php
 
 namespace App\Models;

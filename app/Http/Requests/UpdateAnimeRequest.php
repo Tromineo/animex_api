@@ -22,7 +22,7 @@ class UpdateAnimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titulo' => 'required|string|max:255',
+            'titulo' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'genre' => 'nullable|string|max:100',
         ];

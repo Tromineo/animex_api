@@ -29,5 +29,3 @@ class AddCategoriaRequest extends FormRequest
         ];
     }
 }
-
-?>

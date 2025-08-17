@@ -11,7 +11,6 @@ use App\Http\Requests\UpdateCategoriaRequest;
 use Illuminate\Http\jsonResponse;
 
 class CategoriaController extends Controller
-
 {
     public function __construct()
     {
@@ -49,7 +48,7 @@ class CategoriaController extends Controller
      * @throws \Illuminate\Validation\ValidationException Se os dados de entrada n o forem v lidos.
      */
     public function create(StoreCategoriaRequest $request)
-    {   
+    {
         return response()->json(Categoria::create($request->validated()), 201);
 
     }

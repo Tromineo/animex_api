@@ -24,5 +24,4 @@ use OpenApi\Annotations as OA;
  */
 class AnimeUpdate
 {
-
 }

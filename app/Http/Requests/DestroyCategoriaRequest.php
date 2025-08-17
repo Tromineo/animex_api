@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Categoria;
 
-
 class DestroyCategoriaRequest extends FormRequest
 {
     /**
@@ -25,13 +24,12 @@ class DestroyCategoriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'id' =>[
+           'id' => [
                'required',
                'integer',
                 Rule::exists('categorias', 'id')->whereNull('deleted_at'),
 
-           ] 
+           ]
         ];
     }
 }
-

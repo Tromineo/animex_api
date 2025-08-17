@@ -11,7 +11,7 @@ class StoreAnimeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        
+
         return true;
     }
 
@@ -25,9 +25,9 @@ class StoreAnimeRequest extends FormRequest
         return [
             // Cada chave é o nome do campo
             'titulo' => [
-                'required',  
-                'string',   
-                'max:255'    
+                'required',
+                'string',
+                'max:255'
             ],
             'genero' => [
                 'required',
@@ -35,7 +35,7 @@ class StoreAnimeRequest extends FormRequest
                 'max:255'
             ],
             'resumo' => [
-                'nullable',  
+                'nullable',
                 'string',
                 'max:255'
             ],
