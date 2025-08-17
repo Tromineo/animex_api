@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyAnimeRequest;
 use Illuminate\Http\Request;
+use App\Models\Categoria;
+use App\Http\Requests\StoreCategoriaRequest;
+use App\Http\Requests\DestroyCategoriaRequest;
+use App\Http\Requests\UpdateCategoriaRequest;
+use Illuminate\Http\jsonResponse;
 
 class CategoriaController extends Controller
+
 {
     public function __construct()
     {
@@ -17,7 +24,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-
+        return response()->json(Categoria::all());
     }
     /**
      * Exibe os detalhes de uma categoria específica a partir da id fornecida na requisição.
@@ -30,7 +37,7 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-
+        return response()->json(Categoria::find($id));
     }
     /**
      * Cria uma nova categoria.
@@ -41,8 +48,10 @@ class CategoriaController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException Se os dados de entrada n o forem v lidos.
      */
-    public function create(Request $request)
-    {
+    public function create(StoreCategoriaRequest $request)
+    {   
+        return response()->json(Categoria::create($request->validated()), 201);
+
     }
     /**
      * Exclui uma categoria específica a partir de uma Id fornecida na requisição.
@@ -54,8 +63,9 @@ class CategoriaController extends Controller
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com a Id fornecido não for encontrado.
      */
-    public function delete(Request $request)
+    public function delete(DestroyCategoriaRequest $request)
     {
+        return response()->json(Categoria::destroy($request->id));
     }
     /**
      * Atualiza uma categoria existente.
@@ -68,7 +78,14 @@ class CategoriaController extends Controller
      * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com o ID fornecido não for encontrada.
      */
-    public function update(Request $request)
+    public function update(UpdateCategoriaRequest $request, Categoria $categoria): JsonResponse
     {
+        // 1. Autorização (usando Policy)
+        // Isso verifica se o usuário autenticado tem permissão para atualizar esta categoria.
+        $this->authorize('update', $categoria);
+
+        $categoria->update($request->validated());
+
+        return response()->json($categoria);
     }
 }
