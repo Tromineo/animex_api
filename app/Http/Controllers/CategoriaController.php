@@ -17,47 +17,68 @@ class CategoriaController extends Controller
         //
     }
     /**
-     * Retorna todas as categorias presentes na base de dados.
-     *
-     * @return JsonResponse A resposta JSON com as categorias.
+     * @OA\Get(
+     * path="/categorias",
+     * tags={"Categorias"},
+     * summary="Lista todas as categorias.",
+     * description="Retorna uma lista completa de todas as categorias de animes disponíveis no sistema.",
+     * @OA\Response(
+     * response=200,
+     * description="Lista de categorias retornada com sucesso.",
+     * @OA\JsonContent(
+     * type="array",
+     * @OA\Items(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="nome", type="string", example="Aventura"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
+     * )
+     * )
      */
     public function index()
     {
         return response()->json(Categoria::all());
     }
     /**
-     * Exibe os detalhes de uma categoria específica a partir da id fornecida na requisição.
-     *
-     * @param int $id A id da categoria que será exibida.
-     *
-     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com os detalhes da categoria e status 200 em caso de sucesso.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com a id fornecida não for encontrada.
-     * 
-     * 
      * @OA\Get(
      * path="/categorias/{id}",
-     * summary="Retorna uma categoria específica",
-     * description="Retorna os dados de uma categoria buscando pelo seu ID.",
-     * tags={"Categoria"},
+     * tags={"Categorias"},
+     * summary="Retorna uma categoria específica pelo ID.",
+     * description="Recupera os detalhes de uma única categoria usando seu ID como parâmetro de rota. Retorna um objeto JSON da categoria ou 'null' se não for encontrada.",
      * @OA\Parameter(
      * name="id",
      * in="path",
-     * description="ID da categoria",
+     * description="ID da categoria que será retornada.",
      * required=true,
      * @OA\Schema(
-     * type="integer"
+     * type="integer",
+     * format="int64",
+     * example=1
      * )
      * ),
      * @OA\Response(
      * response=200,
-     * description="Dados da categoria retornado com sucesso.",
-     * @OA\JsonContent(ref="#/components/schemas/Categoria")     
+     * description="Detalhes da categoria retornados com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="nome", type="string", example="Aventura"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
      * ),
      * @OA\Response(
      * response=404,
-     * description="Categoria nao encontrada",
-     * @OA\JsonContent(ref="#/components/schemas/NotFound")
+     * description="Nenhuma categoria encontrada para o ID fornecido (retorna 'null')."
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
      * )
      * )
      */
@@ -66,13 +87,44 @@ class CategoriaController extends Controller
         return response()->json(Categoria::find($id));
     }
     /**
-     * Cria uma nova categoria.
-     *
-     * @param \Illuminate\Http\Request $request A requisição HTTP.
-     *
-     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a categoria criada e status 201 em caso de sucesso.
-     *
-     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada n o forem v lidos.
+     * @OA\Post(
+     * path="/categorias",
+     * tags={"Categorias"},
+     * summary="Cria uma nova categoria.",
+     * description="Registra uma nova categoria no banco de dados com base nos dados fornecidos.",
+     * @OA\RequestBody(
+     * required=true,
+     * description="Dados da categoria a ser criada.",
+     * @OA\JsonContent(
+     * required={"nome"},
+     * @OA\Property(property="nome", type="string", example="Ficção Científica", description="Nome da categoria.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Categoria criada com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=10),
+     * @OA\Property(property="nome", type="string", example="Ficção Científica"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Erro de validação.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="O campo nome é obrigatório."),
+     * @OA\Property(property="errors", type="object",
+     * @OA\AdditionalProperties(type="array", @OA\Items(type="string", example="O campo nome é obrigatório."))
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
+     * )
+     * )
      */
     public function create(StoreCategoriaRequest $request)
     {
@@ -80,29 +132,113 @@ class CategoriaController extends Controller
 
     }
     /**
-     * Exclui uma categoria específica a partir de uma Id fornecida na requisição.
-     *
-     * @param \Illuminate\Http\Request $request A requisição contendo a Id da categoria a ser excluído.
-     *      - 'id': integer, obrigatório. A id da categoria que será excluído.
-     *
-     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a Id da categoria excluído e status 200 em caso de sucesso, ou false e status 204 se o ID não for válido.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com a Id fornecido não for encontrado.
+     * @OA\Delete(
+     * path="/categorias/{id}",
+     * tags={"Categorias"},
+     * summary="Exclui uma categoria pelo ID.",
+     * description="Remove uma categoria específica do banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="ID da categoria a ser excluída.",
+     * required=true,
+     * @OA\Schema(
+     * type="integer",
+     * format="int64",
+     * example=1
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Categoria excluída com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Recurso removido com sucesso."),
+     * @OA\Property(property="deleted_count", type="integer", example=1, description="Número de registros excluídos.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=403,
+     * description="Ação não autorizada.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Você não tem permissão para excluir esta categoria.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Categoria não encontrada.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Categoria não encontrada")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
+     * )
+     * )
      */
     public function delete(DestroyCategoriaRequest $request)
     {
         return response()->json(Categoria::destroy($request->id));
     }
     /**
-     * Atualiza uma categoria existente.
-     *
-     * @param \Illuminate\Http\Request $request A requisição contendo os dados para atualização. Deve incluir os seguintes campos:
-     *      - 'nome': string, opcional, máximo de 255 caracteres.
-     *
-     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a categoria atualizada e status 200 em caso de sucesso.
-     *
-     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com o ID fornecido não for encontrada.
+     * @OA\Put(
+     * path="/categorias/{id}",
+     * tags={"Categorias"},
+     * summary="Atualiza uma categoria existente.",
+     * description="Atualiza os dados de uma categoria específica no banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="ID da categoria a ser atualizada.",
+     * required=true,
+     * @OA\Schema(
+     * type="integer",
+     * format="int64",
+     * example=1
+     * )
+     * ),
+     * @OA\RequestBody(
+     * required=true,
+     * description="Dados da categoria para atualização.",
+     * @OA\JsonContent(
+     * @OA\Property(property="nome", type="string", example="Terror")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Categoria atualizada com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="nome", type="string", example="Terror"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
+     * ),
+     * @OA\Response(
+     * response=403,
+     * description="Ação não autorizada. O usuário não tem permissão para atualizar esta categoria.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Este usuário não está autorizado a realizar esta ação.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Categoria não encontrada.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Categoria não encontrada")
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Erro de validação. Os dados fornecidos são inválidos.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="O campo nome é obrigatório."),
+     * @OA\Property(property="errors", type="object",
+     * @OA\AdditionalProperties(type="array", @OA\Items(type="string", example="O campo nome é obrigatório."))
+     * )
+     * )
+     * )
+     * )
      */
     public function update(UpdateCategoriaRequest $request, Categoria $categoria): JsonResponse
     {
