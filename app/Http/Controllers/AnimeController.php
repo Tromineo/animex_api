@@ -25,29 +25,21 @@ class AnimeController extends Controller
     {
         $this->model = $anime;
     }
+
     /**
-     * Retorna todos os animes presentes na base de dados.
-     *
-     * A resposta pode ser paginada. Se a query string "por_pagina" for passada, a resposta
-     * retorna os animes paginados com o valor especificado. Caso n o seja passado, a resposta
-     * retorna todos os animes.
-     *
-     * @param Request $request A requisi o HTTP.
-     *
-     * @return JsonResponse A resposta JSON com os animes.
-     *
      * @OA\Get(
      * path="/animes",
-     * summary="Retorna uma lista de animes",
-     * description="Retorna uma lista de animes. É possível paginar a lista passando o parâmetro 'por_pagina' na query.",
      * tags={"Animes"},
+     * summary="Retorna uma lista de animes com ou sem paginação.",
+     * description="Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'.",
      * @OA\Parameter(
      * name="por_pagina",
      * in="query",
-     * description="Número de itens por página",
+     * description="Número de itens por página para a paginação.",
      * required=false,
      * @OA\Schema(
-     * type="integer"
+     * type="integer",
+     * format="int64"
      * )
      * ),
      * @OA\Response(
@@ -55,11 +47,20 @@ class AnimeController extends Controller
      * description="Lista de animes retornada com sucesso.",
      * @OA\JsonContent(
      * type="array",
-     * @OA\Items(ref="#/components/schemas/Animes")
+     * @OA\Items(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="titulo", type="string", example="Naruto"),
+     * @OA\Property(property="genero", type="string", example="Aventura, Ação"),
+     * @OA\Property(property="episodios", type="integer", example=500)
      * )
      * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
      * )
-    */
+     * )
+     */
     public function index(Request $request)
     {
         $paginacao = $request->query('por_pagina');
@@ -72,37 +73,42 @@ class AnimeController extends Controller
         return response()->json($animes, Response::HTTP_OK);
     }
     /**
-    * Exibe os detalhes de um animê específico a partir da id fornecida na requisição.
-    *
-    * @param int $id A id do animê que será exibido.
-    *
-    * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com os detalhes do animê e status 200 em caso de sucesso.
-    *
-    * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a id fornecida não for encontrado.
-    *
-    *
      * @OA\Get(
      * path="/animes/{id}",
-     * summary="Retorna um anime específico",
-     * description="Retorna os dados de um anime buscando pelo seu ID.",
-     * tags={"Anime"},
+     * tags={"Animes"},
+     * summary="Retorna um anime específico pelo ID.",
+     * description="Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota.",
      * @OA\Parameter(
      * name="id",
      * in="path",
+     * description="ID do anime que será retornado.",
      * required=true,
-     * description="ID do anime a ser retornado",
      * @OA\Schema(
-     * type="integer"
+     * type="integer",
+     * format="int64",
+     * example=1
      * )
      * ),
      * @OA\Response(
      * response=200,
-     * description="Dados do anime retornado com sucesso.",
-     * @OA\JsonContent(ref="#/components/schemas/Anime")
+     * description="Detalhes do anime retornados com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="titulo", type="string", example="Naruto"),
+     * @OA\Property(property="genero", type="string", example="Aventura, Ação"),
+     * @OA\Property(property="episodios", type="integer", example=500)
+     * )
      * ),
      * @OA\Response(
      * response=404,
-     * description="Anime não encontrado."
+     * description="Anime não encontrado.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Anime não encontrado")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
      * )
      * )
      */
@@ -115,38 +121,45 @@ class AnimeController extends Controller
             return response()->json(['message' => 'Anime não encontrado'], Response::HTTP_NOT_FOUND);
         }
     }
-    /**
-     * Cria um novo animê com os dados recebidos.
-     *
-     * @param \Illuminate\Http\Request $request A requisição contendo os dados para criar um novo animê.
-     * - 'titulo': string, obrigatório, máximo de 255 caracteres.
-     * - 'genero': string, obrigatório, máximo de 255 caracteres.
-     * - 'resumo': string, opcional, máximo de 255 caracteres.
-     * - 'episodios': integer, obrigatório.
-     * - 'lancamento': date, opcional.
-     *
-     * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com o animê criado e status 201 em caso de sucesso.
-     *
-     * @throws \Illuminate\Validation\ValidationException Se os dados de entrada não forem válidos.
-     *
+
+        /**
      * @OA\Post(
      * path="/animes",
      * tags={"Animes"},
-     * summary="Cria um novo animê",
-     * description="Cria um novo recurso de animê no banco de dados.",
+     * summary="Cria um novo anime.",
+     * description="Cria um novo registro de anime no banco de dados com base nos dados fornecidos.",
      * @OA\RequestBody(
      * required=true,
-     * @OA\JsonContent(ref="#/components/schemas/AnimeInput")
+     * description="Dados do anime a ser criado.",
+     * @OA\JsonContent(
+     * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
+     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
+     * @OA\Property(property="episodios", type="integer", example=26, description="Número de episódios (opcional)"),
+     * )
      * ),
      * @OA\Response(
      * response=201,
-     * description="O animê foi criado com sucesso.",
-     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * description="Anime criado com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=2),
+     * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
+     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
+     * @OA\Property(property="episodios", type="integer", example=26)
+     * )
      * ),
      * @OA\Response(
      * response=422,
-     * description="Dados de entrada inválidos.",
-     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * description="Erro de validação.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Os dados fornecidos são inválidos."),
+     * @OA\Property(property="errors", type="object",
+     * @OA\AdditionalProperties(type="array", @OA\Items(type="string", example="O campo titulo é obrigatório."))
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
      * )
      * )
      */
@@ -156,79 +169,116 @@ class AnimeController extends Controller
         return response()->json($anime, 201);
     }
     /**
-    * Exclui um animê específico a partir de uma Id fornecida na requisição. É softdelet.
-    *
-    * @param \Illuminate\Http\Request $request A requisição contendo a Id do animê a ser excluído.
-    *      - 'id': integer, obrigatório. A id do animê que será excluído.
-    *
-    * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com a Id do animê excluído e status 200 em caso de sucesso, ou false e status 204 se o ID não for válido.
-    *
-    * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se o animê com a Id fornecido não for encontrado.
-    *
-    * @OA\Delete(
-     * path="/animes",
+     * @OA\Delete(
+     * path="/animes/{id}",
      * tags={"Animes"},
-     * summary="Delete um animê específico",
-     * description="Deleta um recurso de animê no banco de dados.",
-     * @OA\RequestBody(
+     * summary="Deleta um anime pelo ID.",
+     * description="Remove um anime específico do banco de dados, se o usuário tiver permissão.",
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="ID do anime a ser excluído.",
      * required=true,
-     * @OA\JsonContent(ref="#/components/schemas/AnimeInput")
+     * @OA\Schema(
+     * type="integer",
+     * format="int64",
+     * example=1
+     * )
      * ),
      * @OA\Response(
-     * response=201,
-     * description="O animê foi criado com sucesso.",
-     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * response=200,
+     * description="Anime excluído com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Anime excluido com sucesso")
+     * )
      * ),
      * @OA\Response(
-     * response=422,
-     * description="Dados de entrada inválidos.",
-     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * response=403,
+     * description="Ação não autorizada.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Você não tem permissão para excluir este anime.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Anime não encontrado.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Anime não encontrado")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
      * )
      * )
-    */
+     */
     public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
     {
         $anime->delete();
         return response()->json(['message' => 'Anime excluido com sucesso'], 200);
     }
-
     /**
-    * Atualiza um anime existente.
-    *
-    * @param \Illuminate\Http\Request $request A requisição contendo os dados para atualização. Deve incluir os seguintes campos:
-    *      - 'titulo': string, opcional, máximo de 255 caracteres.
-    *      - 'genero': string, opcional, máximo de 255 caracteres.
-    *      - 'resumo': string, opcional, máximo de 255 caracteres.
-    *      - 'episodios': integer, opcional.
-    *      - 'lancamento': date, opcional.
-    *
-    * @return JsonResponse Retorna uma resposta JSON com uma mensagem de sucesso e o recurso atualizado.
-    *
-    * @throws ValidationException Se os dados de entrada não forem válidos.
-    * @throws ModelNotFoundException Se o recurso com o ID fornecido não for encontrado.
-    *
-    *
-    * @OA\Patch(
-     * path="/animes",
+     * @OA\Put(
+     * path="/animes/{id}",
      * tags={"Animes"},
-     * summary="Atualiza um animê",
-     * description="Atualiza um recurso de animê no banco de dados.",
+     * summary="Atualiza um anime existente.",
+     * description="Atualiza os dados de um anime específico no banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="ID do anime a ser atualizado.",
+     * required=true,
+     * @OA\Schema(
+     * type="integer",
+     * format="int64",
+     * example=1
+     * )
+     * ),
      * @OA\RequestBody(
      * required=true,
-     * @OA\JsonContent(ref="#/components/schemas/AnimeUpdate")
+     * description="Dados do anime para atualização.",
+     * @OA\JsonContent(
+     * @OA\Property(property="titulo", type="string", example="Demon Slayer: Kimetsu no Yaiba"),
+     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
+     * @OA\Property(property="episodios", type="integer", example=26),
+     * )
      * ),
      * @OA\Response(
-     * response=201,
-     * description="O animê foi criado com sucesso.",
-     * @OA\JsonContent(ref="#/components/schemas/AnimeOutput")
+     * response=200,
+     * description="Anime atualizado com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=1),
+     * @OA\Property(property="titulo", type="string", example="Demon Slayer: Kimetsu no Yaiba"),
+     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
+     * @OA\Property(property="episodios", type="integer", example=26)
+     * )
+     * ),
+     * @OA\Response(
+     * response=403,
+     * description="Ação não autorizada. O usuário não tem permissão para atualizar este anime.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Este usuário não está autorizado a realizar esta ação.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Anime não encontrado.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Anime não encontrado")
+     * )
      * ),
      * @OA\Response(
      * response=422,
-     * description="Dados de entrada inválidos.",
-     * @OA\JsonContent(ref="#/components/schemas/ValidationError")
+     * description="Erro de validação. Os dados fornecidos são inválidos.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Os dados fornecidos são inválidos."),
+     * @OA\Property(property="errors", type="object",
+     * @OA\AdditionalProperties(type="array", @OA\Items(type="string", example="O campo titulo é obrigatório."))
      * )
      * )
-    */
+     * )
+     * )
+     */
     public function update(UpdateAnimeRequest $request, Anime $anime): JsonResponse
     {
         // 1. Autorização (usando Policy)
@@ -242,7 +292,65 @@ class AnimeController extends Controller
         // 3. Retorno da resposta
         return response()->json($anime);
     }
-
+        /**
+     * @OA\Post(
+     * path="/animes/{animeId}/vincular-categoria",
+     * tags={"Animes"},
+     * summary="Vincula uma categoria a um anime.",
+     * description="Associa uma categoria existente a um anime específico. O ID do anime é passado na URL, e o ID da categoria é enviado no corpo da requisição.",
+     * @OA\Parameter(
+     * name="animeId",
+     * in="path",
+     * description="ID do anime ao qual a categoria será vinculada.",
+     * required=true,
+     * @OA\Schema(
+     * type="integer",
+     * format="int64",
+     * example=1
+     * )
+     * ),
+     * @OA\RequestBody(
+     * required=true,
+     * description="ID da categoria a ser vinculada.",
+     * @OA\JsonContent(
+     * required={"categoria_id"},
+     * @OA\Property(property="categoria_id", type="integer", format="int64", example=5, description="ID da categoria.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Categoria vinculada com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Categoria vinculada com sucesso."),
+     * @OA\Property(property="anime_categoria", type="object",
+     * @OA\Property(property="anime_id", type="integer", example=1),
+     * @OA\Property(property="categoria_id", type="integer", example=5),
+     * @OA\Property(property="categoria", type="object", description="Detalhes da categoria vinculada."),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Anime ou Categoria não encontrados.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="Anime ou categoria não encontrados.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Erro de validação.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="O campo categoria_id é obrigatório.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
+     * )
+     * )
+     */
     public function vincularCategoria(Request $request, $animeId)
     {
         $animeCategoria = new AnimeCategoria();
