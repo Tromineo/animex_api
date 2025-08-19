@@ -33,6 +33,33 @@ class CategoriaController extends Controller
      * @return \Illuminate\Http\JsonResponse Retorna uma resposta JSON com os detalhes da categoria e status 200 em caso de sucesso.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Se a categoria com a id fornecida não for encontrada.
+     * 
+     * 
+     * @OA\Get(
+     * path="/categorias/{id}",
+     * summary="Retorna uma categoria específica",
+     * description="Retorna os dados de uma categoria buscando pelo seu ID.",
+     * tags={"Categoria"},
+     * @OA\Parameter(
+     * name="id",
+     * in="path",
+     * description="ID da categoria",
+     * required=true,
+     * @OA\Schema(
+     * type="integer"
+     * )
+     * ),
+     * @OA\Response(
+     * response=200,
+     * description="Dados da categoria retornado com sucesso.",
+     * @OA\JsonContent(ref="#/components/schemas/Categoria")     
+     * ),
+     * @OA\Response(
+     * response=404,
+     * description="Categoria nao encontrada",
+     * @OA\JsonContent(ref="#/components/schemas/NotFound")
+     * )
+     * )
      */
     public function show($id)
     {
