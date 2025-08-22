@@ -12,4 +12,10 @@ class Categoria extends Model
     use SoftDeletes;
 
     protected $table = "categorias";
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+    ];
 }
