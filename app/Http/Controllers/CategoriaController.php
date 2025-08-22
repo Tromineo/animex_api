@@ -126,9 +126,11 @@ class CategoriaController extends Controller
      * )
      * )
      */
-    public function create(StoreCategoriaRequest $request)
+    public function create(StoreCategoriaRequest $request, Categoria $categoria)
     {
-        return response()->json(Categoria::create($request->validated()), 201);
+        $categoriaCriada = $categoria->create($request->validated());
+
+        return response()->json($categoriaCriada, 201);
 
     }
     /**
