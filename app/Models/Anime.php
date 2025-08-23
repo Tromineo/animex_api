@@ -33,14 +33,15 @@ class Anime extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = "anime";
+    protected $table = "animes";
 
     protected $fillable = [
         'titulo',
-        'resumo',
+        'sinopse',
         'genero',
-        'lancamento',
-        'episodios'
+        'ano_lancamento',
+        'url_imagem',
+        'status'
     ];
 
     public function categoria()
