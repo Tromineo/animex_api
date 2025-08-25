@@ -20,7 +20,7 @@ class AnimeFactory extends Factory
             'titulo' => $this->faker->word(),
             'ano_lancamento' => $this->faker->year(),
             'sinopse' => $this->faker->sentence(),
-            'status' => $this->faker->integer(1, 2),
+            'id_status' => $this->faker->numberBetween(1, 2),
             'url_imagem' => $this->faker->sentence(),
             'genero' => $this->faker->word(),
         ];
