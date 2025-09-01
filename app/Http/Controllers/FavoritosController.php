@@ -14,7 +14,7 @@ class FavoritosController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Favoritos::all());
     }
 
     /**
@@ -77,9 +77,10 @@ class FavoritosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Favoritos $favoritos)
+    public function show(int $id)
     {
-        //
+        return response()->json(Favoritos::find($id));
+
     }
 
     /**
