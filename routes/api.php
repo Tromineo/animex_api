@@ -40,4 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{categoria}', [AnimeCategoriaController::class, 'delete']);
         Route::patch('/{categoria}', [AnimeCategoriaController::class, 'update']);
     });
+
+    Route::group(['prefix' => 'favoritos'], function () {
+        Route::get('/', [FavoritosController::class, 'index']);
+        Route::get('/{favorito}', [FavoritosController::class, 'show']);
+        Route::post('/', [FavoritosController::class, 'create']);
+        Route::delete('/{favorito}', [FavoritosController::class, 'delete']);
+        Route::patch('/{favorito}', [FavoritosController::class, 'update']);
+    });
 });
