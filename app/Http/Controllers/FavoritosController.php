@@ -96,7 +96,12 @@ class FavoritosController extends Controller
      */
     public function update(Request $request, Favoritos $favoritos)
     {
-        //
+        //usa policy
+        
+        $this->authorize('update', $favoritos);
+        $favoritos->update($request->validated());
+        
+        return response()->json($favoritos);
     }
 
     /**
