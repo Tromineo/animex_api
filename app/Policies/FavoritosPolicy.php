@@ -45,7 +45,7 @@ class FavoritosPolicy
      */
     public function delete(User $user, Favoritos $favoritos): bool
     {
-        return false;
+        return true;
     }
 
     /**
