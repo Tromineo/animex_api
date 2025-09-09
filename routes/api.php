@@ -6,6 +6,7 @@ use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimeCategoriaController;
+use App\Http\Controllers\FavoritosController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
