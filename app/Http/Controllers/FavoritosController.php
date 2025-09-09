@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFavoritoRequest;
-use App\Http\Requests\UpdateFavoritoRequest;
+use App\Http\Requests\UpdateFavoritosRequest;
 use App\Http\Requests\DeleteFavoritosRequest;
 use App\Models\Favoritos;
 use Illuminate\Http\JsonResponse;
@@ -96,12 +96,12 @@ class FavoritosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Favoritos $favoritos)
+    public function update(UpdateFavoritosRequest $request, Favoritos $favorito)
     {
         //usa policy
-        $favoritos->update($request->validated());
+        $favorito->update($request->validated());
         
-        return response()->json($favoritos);
+        return response()->json($favorito, 200);
     }
 
     /**
