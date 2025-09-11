@@ -22,7 +22,6 @@ class AnimeFactory extends Factory
             'sinopse' => $this->faker->sentence(),
             'id_status' => $this->faker->numberBetween(1, 2),
             'url_imagem' => $this->faker->sentence(),
-            'genero' => $this->faker->word(),
         ];
     }
 }
