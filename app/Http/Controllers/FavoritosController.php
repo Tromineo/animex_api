@@ -12,8 +12,26 @@ use Illuminate\Http\Request;
 class FavoritosController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
+    * @OA\Get(
+    *     path="/api/favoritos",
+    *     summary="Listar todos os favoritos",
+    *     description="Retorna uma lista de todos os itens favoritos.",
+    *     operationId="getFavoritos",
+    *     tags={"Favoritos"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="Lista de favoritos retornada com sucesso",
+    *         @OA\JsonContent(
+    *             type="array",
+    *             @OA\Items(ref="#/components/schemas/Favorito")
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=500,
+    *         description="Erro interno do servidor"
+    *     )
+    * )
+    */
     public function index()
     {
         return response()->json(Favoritos::all());
