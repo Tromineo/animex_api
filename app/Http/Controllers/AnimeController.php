@@ -31,7 +31,7 @@ class AnimeController extends Controller
      * path="/animes",
      * tags={"Animes"},
      * summary="Retorna uma lista de animes com ou sem paginação.",
-     * description="Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'.",
+    * description="Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes -H Authorization:Bearer SEU_TOKEN",
      * @OA\Parameter(
      * name="por_pagina",
      * in="query",
@@ -77,7 +77,7 @@ class AnimeController extends Controller
      * path="/animes/{id}",
      * tags={"Animes"},
      * summary="Retorna um anime específico pelo ID.",
-     * description="Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota.",
+    * description="Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes/1 -H Authorization:Bearer SEU_TOKEN",
      * @OA\Parameter(
      * name="id",
      * in="path",

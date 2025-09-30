@@ -17,6 +17,7 @@ class AuthController extends Controller
     * @OA\Post(
     *     path="/api/register",
     *     summary="Registrar novo usuário",
+    *     description="Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/register -H Content-Type:application/json -d {name:Rodrigo,email:rodrigo@rodrigo.com.br,password:senha123,password_confirmation:senha123}",
     *     tags={"Autenticação"},
     *     @OA\RequestBody(
     *         required=true,
@@ -69,16 +70,17 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/login",
-     *     summary="Login do usuário",
-     *     tags={"Autenticação"},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"email", "password"},
-     *             @OA\Property(property="email", type="string", format="email", example="usuario@exemplo.com"),
-     *             @OA\Property(property="password", type="string", format="password", example="12345678")
-     *         )
-     *     ),
+    *     summary="Login do usuário",
+    *     description="Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/login -H Content-Type:application/json -d {email:usuario@exemplo.com,password:12345678}",
+    *     tags={"Autenticação"},
+    *     @OA\RequestBody(
+    *         required=true,
+    *         @OA\JsonContent(
+    *             required={"email", "password"},
+    *             @OA\Property(property="email", type="string", format="email", example="usuario@exemplo.com"),
+    *             @OA\Property(property="password", type="string", format="password", example="12345678")
+    *         )
+    *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Login realizado com sucesso",
