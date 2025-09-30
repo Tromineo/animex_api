@@ -6,11 +6,18 @@ use App\Http\Requests\StoreFavoritoRequest;
 use App\Http\Requests\UpdateFavoritosRequest;
 use App\Http\Requests\DeleteFavoritosRequest;
 use App\Models\Favoritos;
+use App\Services\FavoritosService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class FavoritosController extends Controller
 {
+    protected $favoritosService;
+
+    public function __construct(FavoritosService $favoritosService)
+    {
+        $this->favoritosService = $favoritosService;
+    }
     /**
     * @OA\Get(
     *     path="/api/favoritos",
@@ -34,7 +41,8 @@ class FavoritosController extends Controller
     */
     public function index()
     {
-        return response()->json(Favoritos::all());
+        $favoritos = $this->favoritosService->listarTodos();
+        return response()->json($favoritos);
     }
 
     /**
@@ -89,43 +97,110 @@ class FavoritosController extends Controller
      */
     public function create(StoreFavoritoRequest $request): JsonResponse
     {
-        $favorito = Favoritos::create($request->validated());
+        $favorito = $this->favoritosService->criar($request->validated());
         return response()->json($favorito, 201);
     }
     
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/favoritos/{id}",
+     *     summary="Exibe um favorito específico",
+     *     description="Retorna os dados de um favorito pelo ID.",
+     *     tags={"Favoritos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do favorito",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Favorito encontrado",
+     *         @OA\JsonContent(ref="#/components/schemas/Favorito")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Favorito não encontrado"
+     *     )
+     * )
      */
     public function show(int $id)
     {
-        return response()->json(Favoritos::find($id));
-
+        $favorito = $this->favoritosService->buscarPorId($id);
+        return response()->json($favorito);
     }
 
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Patch(
+     *     path="/api/favoritos/{id}",
+     *     summary="Atualiza um favorito",
+     *     description="Atualiza os dados de um favorito existente.",
+     *     tags={"Favoritos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do favorito",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="anime_id", type="integer", example=42, description="Novo ID do anime")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Favorito atualizado com sucesso",
+     *         @OA\JsonContent(ref="#/components/schemas/Favorito")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Favorito não encontrado"
+     *     )
+     * )
      */
     public function update(UpdateFavoritosRequest $request, Favoritos $favorito)
     {
         //usa policy
-        $favorito->update($request->validated());
-        
-        return response()->json($favorito, 200);
+        $favoritoAtualizado = $this->favoritosService->atualizar($favorito, $request->validated());
+        return response()->json($favoritoAtualizado, 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/favoritos/{id}",
+     *     summary="Remove um favorito",
+     *     description="Remove um favorito do banco de dados pelo ID.",
+     *     tags={"Favoritos"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do favorito",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Favorito removido com sucesso"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Favorito não encontrado"
+     *     )
+     * )
      */
     public function delete(DeleteFavoritosRequest $request, Favoritos $favorito)
     {
         //usa policy
-        if (!$favorito->exists) {
+        $deletado = $this->favoritosService->deletar($favorito);
+        if (!$deletado) {
             return response()->json(['message' => 'Favorito nao encontrado'], 404);
         }
-
-        $favorito->delete();
         return response()->json(null, 204);
     }
 }
