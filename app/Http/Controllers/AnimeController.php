@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAnimeRequest;
 use App\Models\Anime;
+use App\Services\AnimeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use app\Http\Requests\AnimeRequest;
@@ -21,9 +22,11 @@ class AnimeController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(Anime $anime)
+    protected $animeService;
+
+    public function __construct(AnimeService $animeService)
     {
-        $this->model = $anime;
+        $this->animeService = $animeService;
     }
 
     /**
@@ -64,12 +67,7 @@ class AnimeController extends Controller
     public function index(Request $request)
     {
         $paginacao = $request->query('por_pagina');
-        if ($paginacao) {
-            $animes = $this->model->paginate($paginacao);
-        } else {
-            $animes = $this->model->all();
-        }
-
+        $animes = $this->animeService->listarTodos($paginacao);
         return response()->json($animes, Response::HTTP_OK);
     }
     /**
@@ -114,12 +112,11 @@ class AnimeController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        try {
-            $anime = $this->model->findOrFail($id);
-            return response()->json($anime, Response::HTTP_OK);
-        } catch (ModelNotFoundException $e) {
+        $anime = $this->animeService->buscarPorId($id);
+        if (!$anime) {
             return response()->json(['message' => 'Anime não encontrado'], Response::HTTP_NOT_FOUND);
         }
+        return response()->json($anime, Response::HTTP_OK);
     }
 
         /**
@@ -165,7 +162,7 @@ class AnimeController extends Controller
      */
     public function create(StoreAnimeRequest $request): JsonResponse
     {
-        $anime = Anime::create($request->validated());
+        $anime = $this->animeService->criar($request->validated());
         return response()->json($anime, 201);
     }
     /**
@@ -214,7 +211,7 @@ class AnimeController extends Controller
      */
     public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
     {
-        $anime->delete();
+        $this->animeService->deletar($anime);
         return response()->json(['message' => 'Anime excluido com sucesso'], 200);
     }
     /**
@@ -281,16 +278,9 @@ class AnimeController extends Controller
      */
     public function update(UpdateAnimeRequest $request, Anime $anime): JsonResponse
     {
-        // 1. Autorização (usando Policy)
-        // Isso verifica se o usuário autenticado tem permissão para atualizar este anime.
         $this->authorize('update', $anime);
-
-        // 2. Atualização dos dados
-        // O método 'validated()' retorna um array com os dados já validados.
-        $anime->update($request->validated());
-
-        // 3. Retorno da resposta
-        return response()->json($anime);
+        $animeAtualizado = $this->animeService->atualizar($anime, $request->validated());
+        return response()->json($animeAtualizado);
     }
         /**
      * @OA\Post(
