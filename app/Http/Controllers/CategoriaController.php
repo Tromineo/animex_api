@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\CategoriaService;
 use App\Http\Requests\DestroyAnimeRequest;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
@@ -12,10 +13,12 @@ use Illuminate\Http\jsonResponse;
 
 class CategoriaController extends Controller
 {
-    public function __construct()
+    protected $categoriaService;
+    public function __construct(CategoriaService $categoriaService)
     {
-        //
+        $this->categoriaService = $categoriaService;
     }
+
     /**
      * @OA\Get(
      * path="/categorias",
@@ -43,7 +46,7 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        return response()->json(Categoria::all());
+        return response()->json($this->categoriaService->listarTodos());
     }
     /**
      * @OA\Get(
@@ -84,7 +87,7 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        return response()->json(Categoria::find($id));
+        return response()->json($this->categoriaService->buscarPorId($id));
     }
     /**
      * @OA\Post(
@@ -180,7 +183,7 @@ class CategoriaController extends Controller
      */
     public function delete(DestroyCategoriaRequest $request)
     {
-        return response()->json(Categoria::destroy($request->id));
+        return response()->json($this->categoriaService->deletar($request->id));
     }
     /**
      * @OA\Put(
