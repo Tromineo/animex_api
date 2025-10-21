@@ -1,0 +1,1669 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "",
+        "version": "0.1"
+    },
+    "paths": {
+        "/anime-categorias/{id}": {
+            "get": {
+                "tags": [
+                    "AnimeCategorias"
+                ],
+                "summary": "Exibir um anime-categoria pelo ID",
+                "description": "Retorna um objeto de anime-categoria pelo seu ID",
+                "operationId": "showAnimeCategoria",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do anime-categoria",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Anime-categoria encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "anime_id": 10,
+                                    "categoria_id": 2
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anime-categoria não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "message": "Anime-categoria nao encontrado"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/animes": {
+            "get": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Retorna uma lista de animes com ou sem paginação.",
+                "description": "Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes -H Authorization:Bearer SEU_TOKEN",
+                "operationId": "6b9b19c24358ee0b2a42e45472e7c6b2",
+                "parameters": [
+                    {
+                        "name": "por_pagina",
+                        "in": "query",
+                        "description": "Número de itens por página para a paginação.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de animes retornada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "titulo": {
+                                                "type": "string",
+                                                "example": "Naruto"
+                                            },
+                                            "genero": {
+                                                "type": "string",
+                                                "example": "Aventura, Ação"
+                                            },
+                                            "episodios": {
+                                                "type": "integer",
+                                                "example": 500
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Cria um novo anime.",
+                "description": "Cria um novo registro de anime no banco de dados com base nos dados fornecidos.",
+                "operationId": "cae91423263c61ef819fa39116a7430e",
+                "requestBody": {
+                    "description": "Dados do anime a ser criado.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "Demon Slayer"
+                                    },
+                                    "genero": {
+                                        "type": "string",
+                                        "example": "Ação, Fantasia"
+                                    },
+                                    "episodios": {
+                                        "description": "Número de episódios (opcional)",
+                                        "type": "integer",
+                                        "example": 26
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Anime criado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 2
+                                        },
+                                        "titulo": {
+                                            "type": "string",
+                                            "example": "Demon Slayer"
+                                        },
+                                        "genero": {
+                                            "type": "string",
+                                            "example": "Ação, Fantasia"
+                                        },
+                                        "episodios": {
+                                            "type": "integer",
+                                            "example": 26
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "O campo titulo é obrigatório."
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        },
+        "/animes/{id}": {
+            "get": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Retorna um anime específico pelo ID.",
+                "description": "Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes/1 -H Authorization:Bearer SEU_TOKEN",
+                "operationId": "1984fa73872c5ef92a435673a23e3271",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do anime que será retornado.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do anime retornados com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "titulo": {
+                                            "type": "string",
+                                            "example": "Naruto"
+                                        },
+                                        "genero": {
+                                            "type": "string",
+                                            "example": "Aventura, Ação"
+                                        },
+                                        "episodios": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anime não encontrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anime não encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Atualiza um anime existente.",
+                "description": "Atualiza os dados de um anime específico no banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+                "operationId": "60c32afdfb38735208d6b99adbc93a59",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do anime a ser atualizado.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Dados do anime para atualização.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "Demon Slayer: Kimetsu no Yaiba"
+                                    },
+                                    "genero": {
+                                        "type": "string",
+                                        "example": "Ação, Fantasia"
+                                    },
+                                    "episodios": {
+                                        "type": "integer",
+                                        "example": 26
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Anime atualizado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "titulo": {
+                                            "type": "string",
+                                            "example": "Demon Slayer: Kimetsu no Yaiba"
+                                        },
+                                        "genero": {
+                                            "type": "string",
+                                            "example": "Ação, Fantasia"
+                                        },
+                                        "episodios": {
+                                            "type": "integer",
+                                            "example": 26
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não autorizada. O usuário não tem permissão para atualizar este anime.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Este usuário não está autorizado a realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anime não encontrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anime não encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação. Os dados fornecidos são inválidos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Os dados fornecidos são inválidos."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "O campo titulo é obrigatório."
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Deleta um anime pelo ID.",
+                "description": "Remove um anime específico do banco de dados, se o usuário tiver permissão.",
+                "operationId": "65f3bcb22db2e9259bb977b6cf401348",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do anime a ser excluído.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Anime excluído com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anime excluido com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não autorizada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para excluir este anime."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anime não encontrado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anime não encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        },
+        "/animes/{animeId}/vincular-categoria": {
+            "post": {
+                "tags": [
+                    "Animes"
+                ],
+                "summary": "Vincula uma categoria a um anime.",
+                "description": "Associa uma categoria existente a um anime específico. O ID do anime é passado na URL, e o ID da categoria é enviado no corpo da requisição.",
+                "operationId": "2379c09e4be9d9c11990530a656af7c2",
+                "parameters": [
+                    {
+                        "name": "animeId",
+                        "in": "path",
+                        "description": "ID do anime ao qual a categoria será vinculada.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "ID da categoria a ser vinculada.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "categoria_id"
+                                ],
+                                "properties": {
+                                    "categoria_id": {
+                                        "description": "ID da categoria.",
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoria vinculada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria vinculada com sucesso."
+                                        },
+                                        "anime_categoria": {
+                                            "properties": {
+                                                "anime_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "categoria_id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "categoria": {
+                                                    "description": "Detalhes da categoria vinculada.",
+                                                    "type": "object"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Anime ou Categoria não encontrados.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Anime ou categoria não encontrados."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo categoria_id é obrigatório."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Registrar novo usuário",
+                "description": "Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/register -H Content-Type:application/json -d {name:Rodrigo,email:rodrigo@rodrigo.com.br,password:senha123,password_confirmation:senha123}",
+                "operationId": "0903f2e0df1a8857bee538fc055417f0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Rodrigo"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "rodrigo@email.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registro realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully registered"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "token123abc"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Login do usuário",
+                "description": "Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/login -H Content-Type:application/json -d {email:usuario@exemplo.com,password:12345678}",
+                "operationId": "2dd578ff7aba2721293dac66833b27d1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "usuario@exemplo.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged in"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "token123abc"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dados inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/categorias": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Lista todas as categorias.",
+                "description": "Retorna uma lista completa de todas as categorias de animes disponíveis no sistema.",
+                "operationId": "66f747250d1c2a1a99b78b5ffc76ad86",
+                "responses": {
+                    "200": {
+                        "description": "Lista de categorias retornada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "nome": {
+                                                "type": "string",
+                                                "example": "Aventura"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Cria uma nova categoria.",
+                "description": "Registra uma nova categoria no banco de dados com base nos dados fornecidos.",
+                "operationId": "323614163372d2b49383e15d4a080513",
+                "requestBody": {
+                    "description": "Dados da categoria a ser criada.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "description": "Nome da categoria.",
+                                        "type": "string",
+                                        "example": "Ficção Científica"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Categoria criada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Ficção Científica"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo nome é obrigatório."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "O campo nome é obrigatório."
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        },
+        "/categorias/{id}": {
+            "get": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Retorna uma categoria específica pelo ID.",
+                "description": "Recupera os detalhes de uma única categoria usando seu ID como parâmetro de rota. Retorna um objeto JSON da categoria ou 'null' se não for encontrada.",
+                "operationId": "c850dd742053be302993ad6e3c2f9f2b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria que será retornada.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da categoria retornados com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Aventura"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhuma categoria encontrada para o ID fornecido (retorna 'null')."
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Atualiza uma categoria existente.",
+                "description": "Atualiza os dados de uma categoria específica no banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+                "operationId": "32680efa60b9809623c4f4ed282d0c5b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria a ser atualizada.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Dados da categoria para atualização.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "Terror"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Categoria atualizada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "Terror"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não autorizada. O usuário não tem permissão para atualizar esta categoria.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Este usuário não está autorizado a realizar esta ação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação. Os dados fornecidos são inválidos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O campo nome é obrigatório."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "O campo nome é obrigatório."
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Categorias"
+                ],
+                "summary": "Exclui uma categoria pelo ID.",
+                "description": "Remove uma categoria específica do banco de dados. A requisição exige que o usuário tenha permissão para realizar a ação.",
+                "operationId": "0c7190e775eb28367f5e65983581033c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da categoria a ser excluída.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categoria excluída com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Recurso removido com sucesso."
+                                        },
+                                        "deleted_count": {
+                                            "description": "Número de registros excluídos.",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Ação não autorizada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Você não tem permissão para excluir esta categoria."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Categoria não encontrada.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Categoria não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor."
+                    }
+                }
+            }
+        },
+        "/comentarios": {
+            "get": {
+                "tags": [
+                    "Comentários"
+                ],
+                "summary": "Listar todos os comentários",
+                "description": "Retorna uma lista de todos os comentários.",
+                "operationId": "getComentarios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de comentários retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comentario"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            }
+        },
+        "/favoritos": {
+            "get": {
+                "tags": [
+                    "Favoritos"
+                ],
+                "summary": "Listar todos os favoritos",
+                "description": "Retorna uma lista de todos os itens favoritos.",
+                "operationId": "getFavoritos",
+                "responses": {
+                    "200": {
+                        "description": "Lista de favoritos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Favorito"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Favoritos"
+                ],
+                "summary": "Adiciona um anime aos favoritos do usuário",
+                "description": "Cria um novo registro de favorito usando os dados validados do request.",
+                "operationId": "9a68e567cf456e16a185f39835978b8d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "anime_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "description": "ID do usuário que está favoritando o anime",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "anime_id": {
+                                        "description": "ID do anime a ser favoritado",
+                                        "type": "integer",
+                                        "example": 42
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favorito criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID do registro de favorito",
+                                            "type": "integer",
+                                            "example": 123
+                                        },
+                                        "user_id": {
+                                            "description": "ID do usuário",
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "anime_id": {
+                                            "description": "ID do anime",
+                                            "type": "integer",
+                                            "example": 42
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-08-28T18:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The user_id field is required."
+                                                    }
+                                                },
+                                                "anime_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The anime_id field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/favoritos/{id}": {
+            "get": {
+                "tags": [
+                    "Favoritos"
+                ],
+                "summary": "Exibe um favorito específico",
+                "description": "Retorna os dados de um favorito pelo ID.",
+                "operationId": "e466c2459352777ff7e726b5bd42f1ed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do favorito",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Favorito encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favorito"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Favorito não encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Favoritos"
+                ],
+                "summary": "Remove um favorito",
+                "description": "Remove um favorito do banco de dados pelo ID.",
+                "operationId": "5fb1275ca1676be9155b0060c29c3319",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do favorito",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Favorito removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Favorito não encontrado"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Favoritos"
+                ],
+                "summary": "Atualiza um favorito",
+                "description": "Atualiza os dados de um favorito existente.",
+                "operationId": "098179e415ae9275d2c7fb99dc217b33",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do favorito",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "anime_id": {
+                                        "description": "Novo ID do anime",
+                                        "type": "integer",
+                                        "example": 42
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Favorito atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favorito"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Favorito não encontrado"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Anime": {
+                "title": "Anime",
+                "description": "Um modelo de anime",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "titulo": {
+                        "type": "string",
+                        "example": "Naruto"
+                    },
+                    "ano": {
+                        "type": "integer",
+                        "example": 2002
+                    }
+                },
+                "type": "object"
+            },
+            "AnimeCategoria": {
+                "title": "AnimeCategoria",
+                "description": "Um modelo de categoria de um anime",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "anime_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "categoria_id": {
+                        "type": "integer",
+                        "example": 2
+                    }
+                },
+                "type": "object"
+            },
+            "AnimeInput": {
+                "title": "AnimeInput",
+                "description": "Dados de entrada para criar um anime",
+                "required": [
+                    "title",
+                    "genre"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Naruto"
+                    },
+                    "genre": {
+                        "type": "string",
+                        "example": "Shonen"
+                    }
+                },
+                "type": "object"
+            },
+            "AnimeOutput": {
+                "title": "Anime Output",
+                "description": "Dados de um anime retornados pela API",
+                "properties": {
+                    "id": {
+                        "description": "ID único do anime",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 123
+                    },
+                    "title": {
+                        "description": "Título do anime",
+                        "type": "string",
+                        "example": "Naruto"
+                    },
+                    "genre": {
+                        "description": "Gênero do anime",
+                        "type": "string",
+                        "example": "Shonen"
+                    },
+                    "created_at": {
+                        "description": "Data e hora de criação do registro",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-02T10:30:00Z"
+                    },
+                    "updated_at": {
+                        "description": "Data e hora da última atualização do registro",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-02T10:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "AnimeUpdate": {
+                "title": "AnimeUpdate",
+                "description": "Dados de entrada para atualizar um anime",
+                "required": [
+                    "title",
+                    "genre"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Naruto"
+                    },
+                    "genre": {
+                        "type": "string",
+                        "example": "Shonen"
+                    }
+                },
+                "type": "object"
+            },
+            "Animes": {
+                "title": "Anime",
+                "description": "Um modelo de anime",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "titulo": {
+                        "type": "string",
+                        "example": "Naruto"
+                    },
+                    "ano": {
+                        "type": "integer",
+                        "example": 2002
+                    }
+                },
+                "type": "object"
+            },
+            "Comentario": {
+                "title": "Comentario",
+                "required": [
+                    "user_id",
+                    "anime_id",
+                    "conteudo"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "anime_id": {
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "Ótimo anime!"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-28T18:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-28T18:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Favorito": {
+                "title": "Favorito",
+                "required": [
+                    "user_id",
+                    "anime_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "anime_id": {
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-28T18:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-28T18:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "AnimeCategorias",
+            "description": "AnimeCategorias"
+        },
+        {
+            "name": "Animes",
+            "description": "Animes"
+        },
+        {
+            "name": "Autenticação",
+            "description": "Autenticação"
+        },
+        {
+            "name": "Categorias",
+            "description": "Categorias"
+        },
+        {
+            "name": "Comentários",
+            "description": "Comentários"
+        },
+        {
+            "name": "Favoritos",
+            "description": "Favoritos"
+        }
+    ]
+}
