@@ -20,7 +20,7 @@ class FavoritosController extends Controller
     }
     /**
     * @OA\Get(
-    *     path="/api/favoritos",
+    *     path="/favoritos",
     *     summary="Listar todos os favoritos",
     *     description="Retorna uma lista de todos os itens favoritos.",
     *     operationId="getFavoritos",
@@ -104,7 +104,7 @@ class FavoritosController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/favoritos/{id}",
+     *     path="/favoritos/{id}",
      *     summary="Exibe um favorito específico",
      *     description="Retorna os dados de um favorito pelo ID.",
      *     tags={"Favoritos"},
@@ -135,7 +135,7 @@ class FavoritosController extends Controller
 
     /**
      * @OA\Patch(
-     *     path="/api/favoritos/{id}",
+     *     path="/favoritos/{id}",
      *     summary="Atualiza um favorito",
      *     description="Atualiza os dados de um favorito existente.",
      *     tags={"Favoritos"},
@@ -173,7 +173,7 @@ class FavoritosController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/favoritos/{id}",
+     *     path="/favoritos/{id}",
      *     summary="Remove um favorito",
      *     description="Remove um favorito do banco de dados pelo ID.",
      *     tags={"Favoritos"},

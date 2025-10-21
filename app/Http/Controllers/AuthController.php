@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     /**
     * @OA\Post(
-    *     path="/api/register",
+    *     path="/register",
     *     summary="Registrar novo usuário",
     *     description="Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/register -H Content-Type:application/json -d {name:Rodrigo,email:rodrigo@rodrigo.com.br,password:senha123,password_confirmation:senha123}",
     *     tags={"Autenticação"},
@@ -69,7 +69,7 @@ class AuthController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/api/login",
+     *     path="/login",
     *     summary="Login do usuário",
     *     description="Exemplo de requisição curl: curl -X POST http://127.0.0.1:8000/api/login -H Content-Type:application/json -d {email:usuario@exemplo.com,password:12345678}",
     *     tags={"Autenticação"},
