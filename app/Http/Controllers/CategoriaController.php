@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\CategoriaService;
+use App\Services\CategoriaService;
 use App\Http\Requests\DestroyAnimeRequest;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
@@ -14,6 +14,7 @@ use Illuminate\Http\jsonResponse;
 class CategoriaController extends Controller
 {
     protected $categoriaService;
+
     public function __construct(CategoriaService $categoriaService)
     {
         $this->categoriaService = $categoriaService;

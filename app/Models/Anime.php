@@ -38,10 +38,9 @@ class Anime extends Model
     protected $fillable = [
         'titulo',
         'sinopse',
-        'genero',
         'ano_lancamento',
         'url_imagem',
-        'status'
+        'id_status'
     ];
 
     public function categoria()

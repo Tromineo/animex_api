@@ -23,8 +23,10 @@ class UpdateAnimeRequest extends FormRequest
     {
         return [
             'titulo' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'genre' => 'nullable|string|max:100',
+            'sinopse' => 'nullable|string|max:1000',
+            'ano_lancamento' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'url_imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'id_status' => 'nullable|integer',
         ];
     }
 }

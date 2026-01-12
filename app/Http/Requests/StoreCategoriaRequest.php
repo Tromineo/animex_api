@@ -27,10 +27,14 @@ class StoreCategoriaRequest extends FormRequest
                 'string',
                 'max:255'
             ],
-            'slug' => [
-              'required',
+        'slug' => [
+                'required',
                 'string',
                 'max:255'
+            ],
+        'description' => [
+                'nullable',
+                'string'
             ],
         ];
     }

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreAnimeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determina se o usuário está autorizado a fazer esta requisição.
      */
     public function authorize(): bool
     {
@@ -16,36 +16,38 @@ class StoreAnimeRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Retorna regras de validação para criação de um anime
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            // Cada chave é o nome do campo
             'titulo' => [
                 'required',
                 'string',
                 'max:255'
             ],
-            'genero' => [
+            'sinopse' => [
                 'required',
                 'string',
                 'max:255'
             ],
-            'resumo' => [
-                'nullable',
-                'string',
-                'max:255'
+            'ano_lancamento' => [
+                'required',
+                'integer',
+                'min:1900',
+                'max:' . date('Y')
             ],
-            'episodios' => [
+            'url_imagem' => [
                 'nullable',
+                'image',
+                'mimes:jpeg,png,jpg,gif,webp',
+                'max:5120', // 5MB
+            ],
+            'id_status' => [
+                'required',
                 'integer'
-            ],
-            'lancamento' => [
-                'nullable',
-                'date'
             ],
         ];
     }
