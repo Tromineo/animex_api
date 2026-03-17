@@ -20,7 +20,7 @@ O sistema permite cadastro de animes, criação de listas de favoritos, comentá
 
 ### API
 - **Formato:** RESTful API
-- **Autenticação:** JWT (JSON Web Tokens)
+- **Autenticação:** Sanctum (Laravel Sanctum)
 
 ### Performance e Cache
 - **Ferramenta:** Redis
@@ -62,11 +62,16 @@ cp .env.example .env
 ```
 php artisan key:generate
 ```
-5. Gere o segredo JWT
+5. Publique as configurações do Sanctum (caso ainda não tenha feito)
 ```
-php artisan jwt:secret
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 ```
-6. Inicie o servidor local com o artisan
+6. Execute as migrations para criar as tabelas necessárias do Sanctum
+```
+php artisan migrate
+```
+
+7. Inicie o servidor local com o artisan
 ```
 php artisan serve
 ```

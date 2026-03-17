@@ -163,6 +163,7 @@ class AnimeController extends Controller
     public function create(StoreAnimeRequest $request): JsonResponse
     {
         $anime = $this->animeService->criar($request->validated());
+        event(new \App\Events\AnimeCriado($anime));
         return response()->json($anime, 201);
     }
     /**

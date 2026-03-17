@@ -98,10 +98,10 @@ class FavoritosController extends Controller
     public function create(StoreFavoritoRequest $request): JsonResponse
     {
         $favorito = $this->favoritosService->criar($request->validated());
+        event(new \App\Events\FavoritoAdicionado($favorito));
         return response()->json($favorito, 201);
     }
     
-
     /**
      * @OA\Get(
      *     path="/favoritos/{id}",

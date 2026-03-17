@@ -47,6 +47,7 @@ class ComentariosController extends Controller
     public function create(StoreComentarioRequest $request)
     {
         $comentario = $this->comentariosService->criar($request->validated());
+        event(new \App\Events\ComentarioCriado($comentario));
         return response()->json($comentario, 201);
     }
 
