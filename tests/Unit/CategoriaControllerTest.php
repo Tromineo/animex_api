@@ -75,7 +75,7 @@ class CategoriaControllerTest extends TestCase
 
     public function test_delete_returns_json_with_destroy_result()
     {
-                $categoria = Categoria::factory()->create();
+        $categoria = Categoria::factory()->create();
 
         $response = $this->deleteJson("/categorias/{$categoria->id}");
 
