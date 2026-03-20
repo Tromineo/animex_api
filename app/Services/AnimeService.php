@@ -49,7 +49,7 @@ class AnimeService
         if (isset($dados['url_imagem']) && $dados['url_imagem'] instanceof UploadedFile) {
             // Deletar imagem antiga
             $this->imageService->deleteImage($anime->url_imagem);
-            
+
             // Upload da nova imagem
             $imagePath = $this->imageService->uploadImage($dados['url_imagem'], [
                 'width' => 800,

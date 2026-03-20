@@ -23,7 +23,7 @@ class ImageService
 
     /**
      * Processa e salva uma imagem
-     * 
+     *
      * @param UploadedFile $file
      * @param array $options Opções: ['width' => int, 'height' => int, 'quality' => int]
      * @return string Caminho relativo da imagem salva
@@ -37,20 +37,20 @@ class ImageService
 
         // Gerar nome único para o arquivo
         $filename = $this->generateUniqueFilename($file);
-        
+
         // Processar imagem
         $image = $this->imageManager->read($file->getRealPath());
-        
+
         // Redimensionar mantendo proporção
         if ($height) {
             $image->cover($width, $height);
         } else {
             $image->scale(width: $width);
         }
-        
+
         // Converter para formato otimizado
         $encodedImage = $image->toJpeg($quality);
-        
+
         // Salvar no storage
         $path = "{$this->folder}/{$filename}";
         Storage::disk($this->disk)->put($path, $encodedImage);
@@ -65,7 +65,7 @@ class ImageService
         $extension = $file->getClientOriginalExtension();
         $timestamp = now()->format('YmdHis');
         $random = Str::random(8);
-        
+
         return "{$timestamp}_{$random}.{$extension}";
     }
 
