@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class FavoritoAdicionado
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $favorito;
 

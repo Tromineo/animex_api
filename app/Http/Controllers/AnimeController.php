@@ -119,7 +119,7 @@ class AnimeController extends Controller
         return response()->json($anime, Response::HTTP_OK);
     }
 
-        /**
+    /**
      * @OA\Post(
      * path="/animes",
      * tags={"Animes"},
@@ -283,7 +283,7 @@ class AnimeController extends Controller
         $animeAtualizado = $this->animeService->atualizar($anime, $request->validated());
         return response()->json($animeAtualizado);
     }
-        /**
+    /**
      * @OA\Post(
      * path="/animes/{animeId}/vincular-categoria",
      * tags={"Animes"},

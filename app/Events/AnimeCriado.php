@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class AnimeCriado
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $anime;
 

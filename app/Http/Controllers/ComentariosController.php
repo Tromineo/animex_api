@@ -9,8 +9,8 @@ use App\Http\Requests\StoreComentarioRequest;
 
 class ComentariosController extends Controller
 {
-
-    public function __construct(ComentariosService $comentariosService){
+    public function __construct(ComentariosService $comentariosService)
+    {
         $this->comentariosService = $comentariosService;
     }
 

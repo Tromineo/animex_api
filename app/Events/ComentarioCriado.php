@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class ComentarioCriado
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $comentario;
 

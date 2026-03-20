@@ -101,7 +101,7 @@ class FavoritosController extends Controller
         event(new \App\Events\FavoritoAdicionado($favorito));
         return response()->json($favorito, 201);
     }
-    
+
     /**
      * @OA\Get(
      *     path="/favoritos/{id}",
