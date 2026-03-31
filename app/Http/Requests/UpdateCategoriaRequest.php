@@ -19,6 +19,15 @@ class UpdateCategoriaRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'name'        => isset($this->name) ? trim(strip_tags($this->name)) : $this->name,
+            'slug'        => isset($this->slug) ? trim(strip_tags(strtolower($this->slug))) : $this->slug,
+            'description' => isset($this->description) ? trim(strip_tags($this->description)) : $this->description,
+        ]);
+    }
+
     public function rules(): array
     {
         return [

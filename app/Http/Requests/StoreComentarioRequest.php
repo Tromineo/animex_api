@@ -19,6 +19,15 @@ class StoreComentarioRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'usuario_id' => isset($this->usuario_id) ? (int) $this->usuario_id : $this->usuario_id,
+            'anime_id'   => isset($this->anime_id) ? (int) $this->anime_id : $this->anime_id,
+            'texto'      => isset($this->texto) ? trim(strip_tags($this->texto)) : $this->texto,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
