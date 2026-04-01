@@ -1,25 +1,41 @@
-name: PHP CS Fixer
+name: CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+  push:
+    branches: [ "main" ]
 
 jobs:
-  php-cs-fixer:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar PHP e dependências
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          tools: php-cs-fixer
+          php-version: 8.2
+          extensions: mbstring, bcmath, pdo_mysql
           coverage: none
 
-      - name: Rodar PHP-CS-Fixer (modo verificação)
-        run: php-cs-fixer fix --dry-run --diff
+      - name: Cache de dependências
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            composer-
+
+      - name: Instalar dependências
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Verificação de segurança
+        run: composer audit || true
+
+      - name: Rodar testes
+        run: php artisan test
+
+      - name: Lint (Laravel Pint)
+        run: ./vendor/bin/pint --test
