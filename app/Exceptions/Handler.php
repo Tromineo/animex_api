@@ -39,6 +39,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // Se for uma requisição que espera JSON (API), use o tratamento customizado
+        if ($request->expectsJson()) {
+            $className = get_class($exception);
+            $handlers = ApiExceptions::$handlers;
+            if (array_key_exists($className, $handlers)) {
+                $method = $handlers[$className];
+                // Alguns handlers não usam $request, outros sim
+                if (method_exists(ApiExceptions::class, $method)) {
+                    $reflection = new \ReflectionMethod(ApiExceptions::class, $method);
+                    $params = $reflection->getParameters();
+                    if (count($params) === 2) {
+                        return ApiExceptions::$method($exception, $request);
+                    } else {
+                        return ApiExceptions::$method($exception);
+                    }
+                }
+            }
+            // Resposta padrão para exceções não tratadas
+            return response()->json([
+                'status' => 500,
+                'type' => class_basename($exception),
+                'error' => $exception->getMessage(),
+            ], 500);
+        }
         return parent::render($request, $exception);
     }
 
@@ -47,6 +71,9 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        return response()->json(['error' => 'Unauthenticated.'], 401);
+        if ($request->expectsJson()) {
+            return ApiExceptions::handleAuthenticationException($exception, $request);
+        }
+        return parent::unauthenticated($request, $exception);
     }
 }
