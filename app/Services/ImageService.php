@@ -17,7 +17,7 @@ class ImageService
     public function __construct()
     {
         $this->imageManager = new ImageManager(new Driver());
-        $this->disk = config('filesystems.default', 'public');
+        $this->disk = 'public_dir';
         $this->folder = 'animes';
     }
 

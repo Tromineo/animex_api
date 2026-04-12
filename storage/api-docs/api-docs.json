@@ -125,21 +125,39 @@
                     "description": "Dados do anime a ser criado.",
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
+                                "required": [
+                                    "titulo",
+                                    "sinopse",
+                                    "ano_lancamento",
+                                    "id_status",
+                                    "url_imagem"
+                                ],
                                 "properties": {
                                     "titulo": {
                                         "type": "string",
                                         "example": "Demon Slayer"
                                     },
-                                    "genero": {
+                                    "sinopse": {
+                                        "description": "Sinopse do anime",
                                         "type": "string",
-                                        "example": "Ação, Fantasia"
+                                        "example": "Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles."
                                     },
-                                    "episodios": {
-                                        "description": "Número de episódios (opcional)",
+                                    "ano_lancamento": {
+                                        "description": "Ano de lançamento do anime",
                                         "type": "integer",
-                                        "example": 26
+                                        "example": 2019
+                                    },
+                                    "id_status": {
+                                        "description": "ID do status do anime",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "url_imagem": {
+                                        "description": "Imagem do anime (jpeg, png, jpg, gif ou webp, máx 5MB)",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -162,13 +180,17 @@
                                             "type": "string",
                                             "example": "Demon Slayer"
                                         },
-                                        "genero": {
+                                        "sinopse": {
                                             "type": "string",
-                                            "example": "Ação, Fantasia"
+                                            "example": "Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles."
                                         },
-                                        "episodios": {
+                                        "ano_lancamento": {
                                             "type": "integer",
-                                            "example": 26
+                                            "example": 2019
+                                        },
+                                        "id_status": {
+                                            "type": "integer",
+                                            "example": 1
                                         }
                                     },
                                     "type": "object"

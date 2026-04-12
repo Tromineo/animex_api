@@ -50,7 +50,7 @@ class StoreAnimeRequest extends FormRequest
                 'max:' . date('Y')
             ],
             'url_imagem' => [
-                'nullable',
+                'required',
                 'image',
                 'mimes:jpeg,png,jpg,gif,webp',
                 'max:5120', // 5MB
@@ -59,6 +59,32 @@ class StoreAnimeRequest extends FormRequest
                 'required',
                 'integer'
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'titulo.required'          => 'O campo título é obrigatório.',
+            'titulo.string'            => 'O campo título deve ser um texto.',
+            'titulo.max'               => 'O campo título não pode ter mais de 255 caracteres.',
+
+            'sinopse.required'         => 'O campo sinopse é obrigatório.',
+            'sinopse.string'           => 'O campo sinopse deve ser um texto.',
+            'sinopse.max'              => 'O campo sinopse não pode ter mais de 255 caracteres.',
+
+            'ano_lancamento.required'  => 'O campo ano de lançamento é obrigatório.',
+            'ano_lancamento.integer'   => 'O campo ano de lançamento deve ser um número inteiro.',
+            'ano_lancamento.min'       => 'O campo ano de lançamento deve ser no mínimo 1900.',
+            'ano_lancamento.max'       => 'O campo ano de lançamento não pode ser maior que o ano atual.',
+
+            'url_imagem.required'      => 'A imagem do anime é obrigatória.',
+            'url_imagem.image'         => 'O arquivo enviado deve ser uma imagem válida.',
+            'url_imagem.mimes'         => 'A imagem deve estar nos formatos: jpeg, png, jpg, gif ou webp.',
+            'url_imagem.max'           => 'A imagem não pode ser maior que 5MB.',
+
+            'id_status.required'       => 'O campo status é obrigatório.',
+            'id_status.integer'        => 'O campo status deve ser um número inteiro válido.',
         ];
     }
 }

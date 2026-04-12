@@ -128,10 +128,16 @@ class AnimeController extends Controller
      * @OA\RequestBody(
      * required=true,
      * description="Dados do anime a ser criado.",
-     * @OA\JsonContent(
+     * @OA\MediaType(
+     * mediaType="multipart/form-data",
+     * @OA\Schema(
+     * required={"titulo", "sinopse", "ano_lancamento", "id_status", "url_imagem"},
      * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
-     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
-     * @OA\Property(property="episodios", type="integer", example=26, description="Número de episódios (opcional)"),
+     * @OA\Property(property="sinopse", type="string", example="Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles.", description="Sinopse do anime"),
+     * @OA\Property(property="ano_lancamento", type="integer", example=2019, description="Ano de lançamento do anime"),
+     * @OA\Property(property="id_status", type="integer", example=1, description="ID do status do anime"),
+     * @OA\Property(property="url_imagem", type="string", format="binary", description="Imagem do anime (jpeg, png, jpg, gif ou webp, máx 5MB)")
+     * )
      * )
      * ),
      * @OA\Response(
@@ -140,8 +146,9 @@ class AnimeController extends Controller
      * @OA\JsonContent(
      * @OA\Property(property="id", type="integer", example=2),
      * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
-     * @OA\Property(property="genero", type="string", example="Ação, Fantasia"),
-     * @OA\Property(property="episodios", type="integer", example=26)
+     * @OA\Property(property="sinopse", type="string", example="Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles."),
+     * @OA\Property(property="ano_lancamento", type="integer", example=2019),
+     * @OA\Property(property="id_status", type="integer", example=1)
      * )
      * ),
      * @OA\Response(
