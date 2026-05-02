@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use OpenApi\Annotations as OA;
-use Exception;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @OA\Info(title="", version="0.1")
  */
 class AuthController extends Controller
 {
+    public function __construct(private AuthService $authService) {}
     /**
     * @OA\Post(
     *     path="/register",
@@ -46,26 +48,13 @@ class AuthController extends Controller
     */
     public function register(Request $request)
     {
-        try {
-            $request->validate([
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+        $resultado = $this->authService->registrar($request->all());
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-            return response()->json([
-                'message' => 'Successfully registered',
-                'user' => $user,
-                'token' => $user->createToken('auth_token')->plainTextToken
-            ]);
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
-
+        return response()->json([
+            'message' => 'Successfully registered',
+            'user'    => $resultado['user'],
+            'token'   => $resultado['token'],
+        ]);
     }
     /**
      * @OA\Post(
