@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimeCategoriaController;
 use App\Http\Controllers\FavoritosController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -49,4 +50,12 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::delete('/{favorito}', [FavoritosController::class, 'delete']);
         Route::patch('/{favorito}', [FavoritosController::class, 'update']);
     });
+
+    Route::group(['prefix' => 'comentarios'], function () {
+        Route::get('/', [\App\Http\Controllers\ComentariosController::class, 'index']);
+        Route::get('/{id}', [\App\Http\Controllers\ComentariosController::class, 'show']);
+        Route::post('/', [\App\Http\Controllers\ComentariosController::class, 'create']);
+    });
+
+    Route::post('/chat', [ChatController::class, 'chat']);
 });
