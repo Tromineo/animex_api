@@ -2,31 +2,41 @@
 
 namespace App\Services;
 
-use App\Models\Anime;
+use App\Repositories\Contracts\AnimeRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 
 class AnimeService
 {
     protected ImageService $imageService;
+    protected AnimeRepositoryInterface $animeRepository;
 
-    public function __construct(ImageService $imageService)
+    public function __construct(ImageService $imageService, AnimeRepositoryInterface $animeRepository)
     {
         $this->imageService = $imageService;
+        $this->animeRepository = $animeRepository;
     }
 
     public function listarTodos($porPagina = null)
     {
+        $ttl = 3600; // tempo que vai ser guardado no cache, em segundos (1 hora)
         if ($porPagina) {
-            return Anime::paginate($porPagina);
+            $page = request()?->get('page', 1) ?? 1;
+            $key = "animes:page:{$page}:per:{$porPagina}";
+            return Cache::tags(['animes'])->remember($key, $ttl, fn() => $this->animeRepository->paginate($porPagina));
         }
-        return Anime::all();
+
+        $key = 'animes:all';
+        return Cache::tags(['animes'])->remember($key, $ttl, fn() => $this->animeRepository->all());
     }
 
     public function buscarPorId($id)
     {
-        return Anime::find($id);
+        $ttl = 3600;
+        $key = "anime:{$id}";
+        return Cache::tags(['animes'])->remember($key, $ttl, fn() => $this->animeRepository->find($id));
     }
 
     public function criar(array $dados)
@@ -40,10 +50,15 @@ class AnimeService
             $dados['url_imagem'] = $imagePath;
         }
 
-        return Anime::create($dados);
+        $anime = $this->animeRepository->create($dados);
+        // Invalida cache
+        Cache::tags(['animes'])->flush();
+
+        //event(new \App\Events\AnimeCriado($anime));
+        return $anime;
     }
 
-    public function atualizar(Anime $anime, array $dados)
+    public function atualizar($anime, array $dados)
     {
         // Processar nova imagem se fornecida
         if (isset($dados['url_imagem']) && $dados['url_imagem'] instanceof UploadedFile) {
@@ -58,18 +73,22 @@ class AnimeService
             $dados['url_imagem'] = $imagePath;
         }
 
-        $anime->update($dados);
-        return $anime;
+        $updated = $this->animeRepository->update($anime, $dados);
+        // Invalidate caches
+        Cache::tags(['animes'])->flush();
+        return $updated;
     }
 
-    public function deletar(Anime $anime)
+    public function deletar($anime)
     {
         // Deletar imagem associada
         if ($anime->url_imagem) {
             $this->imageService->deleteImage($anime->url_imagem);
         }
 
-        $anime->delete();
-        return true;
+        $deleted = $this->animeRepository->delete($anime);
+        // Invalidate caches
+        Cache::tags(['animes'])->flush();
+        return $deleted;
     }
 }

@@ -22,7 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Repository bindings
+        $this->app->bind(
+            \App\Repositories\Contracts\AnimeRepositoryInterface::class,
+            \App\Repositories\EloquentAnimeRepository::class
+        );
     }
 
     /**
