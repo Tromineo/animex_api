@@ -22,7 +22,7 @@ class StoreComentarioRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'usuario_id' => isset($this->usuario_id) ? (int) $this->usuario_id : $this->usuario_id,
+            'user_id' => isset($this->user_id) ? (int) $this->user_id : $this->user_id,
             'anime_id'   => isset($this->anime_id) ? (int) $this->anime_id : $this->anime_id,
             'texto'      => isset($this->texto) ? trim(strip_tags($this->texto)) : $this->texto,
         ]);
@@ -31,9 +31,9 @@ class StoreComentarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'usuario_id' => 'required|exists:usuarios,id',
+            'user_id' => 'required|exists:users,id',
             'anime_id' => 'required|exists:animes,id',
-            'texto' => 'required|string|max:1000',
+            'content' => 'required|string|max:1000',
         ];
     }
 }

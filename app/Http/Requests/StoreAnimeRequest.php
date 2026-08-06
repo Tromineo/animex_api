@@ -50,7 +50,6 @@ class StoreAnimeRequest extends FormRequest
                 'max:' . date('Y')
             ],
             'url_imagem' => [
-                'required',
                 'image',
                 'mimes:jpeg,png,jpg,gif,webp',
                 'max:5120', // 5MB
