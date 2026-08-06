@@ -20,6 +20,7 @@ use PHPMD\Renderer\JSONRenderer;
 
 class AnimeController extends Controller
 {
+    //Serve para verificar se o usuário tem permissão para realizar determinadas ações, como atualizar ou deletar um anime.
     use AuthorizesRequests;
 
     protected $animeService;
@@ -112,6 +113,7 @@ class AnimeController extends Controller
      */
     public function show(int $id): JsonResponse
     {
+        // Busca o anime pelo ID usando o serviço
         $anime = $this->animeService->buscarPorId($id);
         if (!$anime) {
             return response()->json(['message' => 'Anime não encontrado'], Response::HTTP_NOT_FOUND);
@@ -131,7 +133,7 @@ class AnimeController extends Controller
      * @OA\MediaType(
      * mediaType="multipart/form-data",
      * @OA\Schema(
-     * required={"titulo", "sinopse", "ano_lancamento", "id_status", "url_imagem"},
+     * required={"titulo", "sinopse", "ano_lancamento", "id_status"},
      * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
      * @OA\Property(property="sinopse", type="string", example="Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles.", description="Sinopse do anime"),
      * @OA\Property(property="ano_lancamento", type="integer", example=2019, description="Ano de lançamento do anime"),
@@ -170,7 +172,6 @@ class AnimeController extends Controller
     public function create(StoreAnimeRequest $request): JsonResponse
     {
         $anime = $this->animeService->criar($request->validated());
-        event(new \App\Events\AnimeCriado($anime));
         return response()->json($anime, 201);
     }
     /**
