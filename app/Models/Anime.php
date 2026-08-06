@@ -43,6 +43,10 @@ class Anime extends Model
         'id_status'
     ];
 
+    protected $dispatchesEvents = [
+        'created' => \App\Events\AnimeCriado::class,
+    ];
+
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');
