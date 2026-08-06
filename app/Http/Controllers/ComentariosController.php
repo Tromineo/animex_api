@@ -40,9 +40,49 @@ class ComentariosController extends Controller
         $comentarios = $this->comentariosService->listarTodos();
         return response()->json($comentarios);
     }
-
     /**
-     * Show the form for creating a new resource.
+     * @OA\Post(
+     * path="/comentarios",
+     * tags={"Comentários"},
+     * summary="Cria um novo comentário.",
+     * description="Registra um novo comentário no banco de dados com base nos dados fornecidos.",
+     * @OA\RequestBody(
+     * required=true,
+     * description="Dados do comentário a ser criado.",
+     * @OA\JsonContent(
+     * required={"user_id", "anime_id", "content"},
+     * @OA\Property(property="user_id", type="integer", example=1, description="ID do usuário que criou o comentário."),
+     * @OA\Property(property="anime_id", type="integer", example=1, description="ID do anime ao qual o comentário se refere."),
+     * @OA\Property(property="content", type="string", example="ótimo anime!", description="Conteúdo do comentário.")
+     * )
+     * ),
+     * @OA\Response(
+     * response=201,
+     * description="Comentário criado com sucesso.",
+     * @OA\JsonContent(
+     * @OA\Property(property="id", type="integer", example=10),
+     * @OA\Property(property="user_id", type="integer", example=1),
+     * @OA\Property(property="anime_id", type="integer", example=1),
+     * @OA\Property(property="content", type="string", example="ótimo anime!"),
+     * @OA\Property(property="created_at", type="string", format="date-time"),
+     * @OA\Property(property="updated_at", type="string", format="date-time")
+     * )
+     * ),
+     * @OA\Response(
+     * response=422,
+     * description="Erro de validação.",
+     * @OA\JsonContent(
+     * @OA\Property(property="message", type="string", example="O campo user_id é obrigatório."),
+     * @OA\Property(property="errors", type="object",
+     * @OA\AdditionalProperties(type="array", @OA\Items(type="string", example="O campo user_id é obrigatório."))
+     * )
+     * )
+     * ),
+     * @OA\Response(
+     * response=500,
+     * description="Erro interno do servidor."
+     * )
+     * )
      */
     public function create(StoreComentarioRequest $request)
     {
