@@ -34,7 +34,7 @@ class ComentarioCriado
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('comentarios .' . $this->comentario->anime_id         ),
         ];
     }
 }
