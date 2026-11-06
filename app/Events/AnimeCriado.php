@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Anime;
+use App\Models\Work;
 
 class AnimeCriado
 {
@@ -21,7 +21,7 @@ class AnimeCriado
      * Create a new event instance.
      */
     public function __construct(
-        public Anime $anime)
+        public Work $anime)
     {
         $this->anime = $anime;
     }

@@ -58,6 +58,10 @@ class StoreAnimeRequest extends FormRequest
                 'required',
                 'integer'
             ],
+            'type' => ['sometimes', 'required', 'in:anime,manga'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'episodes' => ['nullable', 'integer', 'min:0'],
+            'chapters' => ['nullable', 'integer', 'min:0'],
         ];
     }
 

@@ -70,5 +70,16 @@ class AnimeCategoriaController extends Controller
         }
     }
 
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $categoria = $this->model->findOrFail($id);
+            $categoria->delete();
+            return response()->json(null, Response::HTTP_NO_CONTENT);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Anime-categoria nao encontrado'], Response::HTTP_NOT_FOUND);
+        }
+    }
+
 
 }

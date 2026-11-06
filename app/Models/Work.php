@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\WorkType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @OA\Schema(
- * schema="Anime",
- * title="Anime",
- * description="Um modelo de anime",
+ * schema="Work",
+ * title="Work",
+ * description="Um trabalho do catálogo",
  * @OA\Property(
  * property="id",
  * type="integer",
@@ -26,21 +27,33 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * type="integer",
  * example=2002
  * )
+ * @OA\Property(property="type", type="string", enum={"anime", "manga"}, example="anime"),
+ * @OA\Property(property="slug", type="string", example="naruto"),
+ * @OA\Property(property="episodes", type="integer", nullable=true, example=220),
+ * @OA\Property(property="chapters", type="integer", nullable=true, example=700)
  * )
  */
-class Anime extends Model
+class Work extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = "animes";
+    protected $table = 'works';
 
     protected $fillable = [
         'titulo',
         'sinopse',
         'ano_lancamento',
         'url_imagem',
-        'id_status'
+        'id_status',
+        'type',
+        'slug',
+        'episodes',
+        'chapters',
+    ];
+
+    protected $casts = [
+        'type' => WorkType::class,
     ];
 
     protected $dispatchesEvents = [

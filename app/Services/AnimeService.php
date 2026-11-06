@@ -18,8 +18,7 @@ class AnimeService
         $this->imageService = $imageService;
         $this->animeRepository = $animeRepository;
     }
-
-    public function listarTodos($porPagina = null)
+    public function listarTodos($porPagina = null): Collection
     {
         $ttl = 3600; // tempo que vai ser guardado no cache, em segundos (1 hora)
         if ($porPagina) {
@@ -31,14 +30,12 @@ class AnimeService
         $key = 'animes:all';
         return Cache::tags(['animes'])->remember($key, $ttl, fn() => $this->animeRepository->all());
     }
-
     public function buscarPorId($id)
     {
         $ttl = 3600;
         $key = "anime:{$id}";
         return Cache::tags(['animes'])->remember($key, $ttl, fn() => $this->animeRepository->find($id));
     }
-
     public function criar(array $dados)
     {
         // Processar upload de imagem se presente
@@ -57,7 +54,6 @@ class AnimeService
         //event(new \App\Events\AnimeCriado($anime));
         return $anime;
     }
-
     public function atualizar($anime, array $dados)
     {
         // Processar nova imagem se fornecida
@@ -78,7 +74,6 @@ class AnimeService
         Cache::tags(['animes'])->flush();
         return $updated;
     }
-
     public function deletar($anime)
     {
         // Deletar imagem associada
@@ -91,4 +86,13 @@ class AnimeService
         Cache::tags(['animes'])->flush();
         return $deleted;
     }
+    public function getRecentes(): Collection
+    {
+        return $this->animeRepository->getRecentes();
+    }
+    public function getPopulares(): Collection
+    {
+        return $this->animeRepository->getPopulares();
+    }
 }
+    

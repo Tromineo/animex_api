@@ -18,7 +18,7 @@ class ImageService
     {
         $this->imageManager = new ImageManager(new Driver());
         $this->disk = 'public_dir';
-        $this->folder = 'animes';
+        $this->folder = 'storage/animes';
     }
 
     /**
@@ -48,11 +48,12 @@ class ImageService
             $image->scale(width: $width);
         }
 
-        // Converter para formato otimizado
+        // Converte para formato otimizado
         $encodedImage = $image->toJpeg($quality);
 
-        // Salvar no storage
+        // monta o path
         $path = "{$this->folder}/{$filename}";
+        //salva via put
         Storage::disk($this->disk)->put($path, $encodedImage);
         return $path;
     }

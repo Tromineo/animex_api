@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAnimeRequest;
-use App\Models\Anime;
+use App\Models\Work;
 use App\Services\AnimeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,12 +13,11 @@ use App\Http\Requests\UpdateAnimeRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use ModelNotFoundException;
 use App\Http\Requests\AddCategoriaRequest;
 use App\Models\AnimeCategoria;
 use PHPMD\Renderer\JSONRenderer;
 
-class AnimeController extends Controller
+class WorkController extends Controller
 {
     //Serve para verificar se o usuário tem permissão para realizar determinadas ações, como atualizar ou deletar um anime.
     use AuthorizesRequests;
@@ -29,13 +28,12 @@ class AnimeController extends Controller
     {
         $this->animeService = $animeService;
     }
-
     /**
      * @OA\Get(
      * path="/animes",
      * tags={"Animes"},
      * summary="Retorna uma lista de animes com ou sem paginação.",
-    * description="Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes -H Authorization:Bearer SEU_TOKEN",
+     * description="Este endpoint pode retornar todos os animes ou uma lista paginada, dependendo do parâmetro 'por_pagina'. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes -H Authorization:Bearer SEU_TOKEN",
      * @OA\Parameter(
      * name="por_pagina",
      * in="query",
@@ -76,7 +74,7 @@ class AnimeController extends Controller
      * path="/animes/{id}",
      * tags={"Animes"},
      * summary="Retorna um anime específico pelo ID.",
-    * description="Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes/1 -H Authorization:Bearer SEU_TOKEN",
+     * description="Recupera os detalhes de um único anime usando o seu ID como parâmetro de rota. Exemplo de requisição curl: curl -X GET http://127.0.0.1:8000/api/animes/1 -H Authorization:Bearer SEU_TOKEN",
      * @OA\Parameter(
      * name="id",
      * in="path",
@@ -120,7 +118,6 @@ class AnimeController extends Controller
         }
         return response()->json($anime, Response::HTTP_OK);
     }
-
     /**
      * @OA\Post(
      * path="/animes",
@@ -218,7 +215,7 @@ class AnimeController extends Controller
      * )
      * )
      */
-    public function delete(DestroyAnimeRequest $request, Anime $anime): JsonResponse
+    public function delete(DestroyAnimeRequest $request, Work $anime): JsonResponse
     {
         $this->animeService->deletar($anime);
         return response()->json(['message' => 'Anime excluido com sucesso'], 200);
@@ -285,7 +282,7 @@ class AnimeController extends Controller
      * )
      * )
      */
-    public function update(UpdateAnimeRequest $request, Anime $anime): JsonResponse
+    public function update(UpdateAnimeRequest $request, Work $anime): JsonResponse
     {
         $this->authorize('update', $anime);
         $animeAtualizado = $this->animeService->atualizar($anime, $request->validated());
@@ -361,6 +358,74 @@ class AnimeController extends Controller
             'message' => 'Categoria vinculada com sucesso.',
             'anime' => $animeCategoria->load('categoria')
         ], 200);
+    }
+    /**
+     * @OA\Get(
+     * path="/animes/recentes",
+     * tags={"Animes"},
+     * summary="Retorna uma lista de animes recentes (da semana passada).",
+     * description="Este endpoint retorna uma lista de animes recentes. Exemplo de requisição curl: curl -X GET http://localhost:8000/api/animes/recentes",
+     * @OA\Response(
+        * response=200,
+        * description="Retorna uma lista de animes recentes.",
+        * @OA\JsonContent(
+        * type="array",
+        * @OA\Items(
+        * @OA\Property(property="id", type="integer", example=1),
+        * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
+        * @OA\Property(property="sinopse", type="string", example="Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles."),
+        * @OA\Property(property="ano_lancamento", type="integer", example=2019),
+        * @OA\Property(property="id_status", type="integer", example=1),
+        * @OA\Property(property="url_imagem", type="string", format="binary", description="Imagem do anime (jpeg, png, jpg, gif ou webp, máx 5MB)"),
+        * @OA\Property(property="created_at", type="string", format="date-time"),
+        * @OA\Property(property="updated_at", type="string", format="date-time")
+        * )
+        * )
+        * ),
+        * @OA\Response(
+        * response=500,
+        * description="Erro interno do servidor."
+        * )
+        * )
+     */
+    public function getRecentes(): JsonResponse
+    {
+        $recentes = $this->animeService->getRecentes();
+        return response()->json($recentes, Response::HTTP_OK);
+    }
+    /**
+     * @OA\Get(
+     * path="/animes/populares",
+     * tags={"Animes"},
+     * summary="Retorna uma lista de animes populares.",
+     * description="Este endpoint retorna uma lista de animes populares. Exemplo de requisição curl: curl -X GET http://localhost:8000/api/animes/populares",
+     * @OA\Response(
+        * response=200,
+        * description="Retorna uma lista de animes populares.",
+        * @OA\JsonContent(
+        * type="array",
+        * @OA\Items(
+        * @OA\Property(property="id", type="integer", example=1),
+        * @OA\Property(property="titulo", type="string", example="Demon Slayer"),
+        * @OA\Property(property="sinopse", type="string", example="Tanjiro Kamado é um jovem bondoso que se torna um caçador de demônios após sua família ser massacrada por demônios e sua irmã Nezuko ser transformada em um deles."),
+        * @OA\Property(property="ano_lancamento", type="integer", example=2019),
+        * @OA\Property(property="id_status", type="integer", example=1),
+        * @OA\Property(property="url_imagem", type="string", format="binary", description="Imagem do anime (jpeg, png, jpg, gif ou webp, máx 5MB)"),
+        * @OA\Property(property="created_at", type="string", format="date-time"),
+        * @OA\Property(property="updated_at", type="string", format="date-time")
+        * )
+        * )
+        * ),
+        * @OA\Response(
+        * response=500,
+        * description="Erro interno do servidor."    
+        * )
+        * )
+     */
+    public function getPopulares(): JsonResponse
+    {
+        $populares = $this->animeService->getPopulares();
+        return response()->json($populares, Response::HTTP_OK);
     }
 
 }
