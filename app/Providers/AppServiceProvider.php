@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Anime;
+use App\Models\Work;
 use App\Models\Favoritos;
 use App\Policies\AnimePolicy;
 use App\Policies\FavoritosPolicy;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        Anime::class => AnimePolicy::class,
+        Work::class => AnimePolicy::class,
         Favoritos::class => FavoritosPolicy::class
     ];
     /**

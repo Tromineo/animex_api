@@ -111,10 +111,36 @@ class ComentariosController extends Controller
         $comentarioAtualizado = $this->comentariosService->atualizar($comentario, $request->validated());
         return response()->json($comentarioAtualizado);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+/**
+ * @OA\Delete(
+ *     path="/comentarios/{id}",
+ *     tags={"Comentários"},
+ *     summary="Deleta um comentário pelo ID.",
+ *     description="Deleta um comentário específico do banco de dados com base no ID fornecido.",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID do comentário a ser deletado.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=204,
+ *         description="Comentário deletado com sucesso."
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Comentário não encontrado"
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erro interno do servidor"
+ *     )
+ * )
+ */
     public function destroy(Comentarios $comentarios)
     {
         $deletado = $this->comentariosService->deletar($comentarios);

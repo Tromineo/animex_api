@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AnimeController;
+use App\Http\Controllers\WorkController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimeCategoriaController;
@@ -17,16 +17,16 @@ Route::post('/register', [AuthController::class, 'register'])->middleware('throt
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
 Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
-
     Route::group(['prefix' => 'animes'], function () {
-        Route::get('/', [AnimeController::class, 'index']);
-        Route::get('/{anime}', [AnimeController::class, 'show']);
-        Route::post('/', [AnimeController::class, 'create']);
-        Route::delete('/{anime}', [AnimeController::class, 'delete']);
-        Route::patch('/{anime}', [AnimeController::class, 'update']);
-        Route::post('/{anime}/categorias', [AnimeController::class, 'vincularCategoria']);
+        Route::get('/',                     [WorkController::class, 'index']);
+        Route::get('/recentes',             [WorkController::class, 'getRecentes']);
+        Route::get('/populares',            [WorkController::class, 'getPopulares']);
+        Route::get('/{anime}',              [WorkController::class, 'show']);
+        Route::post('/',                    [WorkController::class, 'create']);
+        Route::delete('/{anime}',           [WorkController::class, 'delete']);
+        Route::patch('/{anime}',            [WorkController::class, 'update']);
+        Route::post('/{anime}/categorias',  [WorkController::class, 'vincularCategoria']);
     });
-
     Route::group(['prefix' => 'categorias'], function () {
         Route::get('/', [CategoriaController::class, 'index']);
         Route::get('/{categoria}', [CategoriaController::class, 'show']);
@@ -34,7 +34,6 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::delete('/{categoria}', [CategoriaController::class, 'delete']);
         Route::patch('/{categoria}', [CategoriaController::class, 'update']);
     });
-
     Route::group(['prefix' => 'animeCategorias'], function () {
         Route::get('/', [AnimeCategoriaController::class, 'index']);
         Route::get('/{categoria}', [AnimeCategoriaController::class, 'show']);
@@ -42,20 +41,17 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::delete('/{categoria}', [AnimeCategoriaController::class, 'delete']);
         Route::patch('/{categoria}', [AnimeCategoriaController::class, 'update']);
     });
-
     Route::group(['prefix' => 'favoritos'], function () {
-        Route::get('/', [FavoritosController::class, 'index']);
-        Route::get('/{favorito}', [FavoritosController::class, 'show']);
-        Route::post('/', [FavoritosController::class, 'create']);
-        Route::delete('/{favorito}', [FavoritosController::class, 'delete']);
-        Route::patch('/{favorito}', [FavoritosController::class, 'update']);
+        Route::get('/',                 [FavoritosController::class, 'index']);
+        Route::get('/{favorito}',       [FavoritosController::class, 'show']);
+        Route::post('/',                [FavoritosController::class, 'create']);
+        Route::delete('/{favorito}',    [FavoritosController::class, 'delete']);
+        Route::patch('/{favorito}',     [FavoritosController::class, 'update']);
     });
-
     Route::group(['prefix' => 'comentarios'], function () {
-        Route::get('/', [\App\Http\Controllers\ComentariosController::class, 'index']);
+        Route::get('/',     [\App\Http\Controllers\ComentariosController::class, 'index']);
         Route::get('/{id}', [\App\Http\Controllers\ComentariosController::class, 'show']);
-        Route::post('/', [\App\Http\Controllers\ComentariosController::class, 'create']);
+        Route::post('/',    [\App\Http\Controllers\ComentariosController::class, 'create']);
     });
-
     Route::post('/chat', [ChatController::class, 'chat']);
 });

@@ -37,6 +37,10 @@ class UpdateAnimeRequest extends FormRequest
             'ano_lancamento' => 'nullable|integer|min:1900|max:' . date('Y'),
             'url_imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'id_status' => 'nullable|integer',
+            'type' => 'sometimes|required|in:anime,manga',
+            'slug' => 'nullable|string|max:255',
+            'episodes' => 'nullable|integer|min:0',
+            'chapters' => 'nullable|integer|min:0',
         ];
     }
 }

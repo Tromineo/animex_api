@@ -32,7 +32,7 @@ class StoreComentarioRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'anime_id' => 'required|exists:animes,id',
+            'anime_id' => 'required|exists:works,id',
             'content' => 'required|string|max:1000',
         ];
     }
